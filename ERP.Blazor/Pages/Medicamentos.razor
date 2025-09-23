@@ -1,0 +1,56 @@
+@page "/medicamentos"
+@inject HttpClient Http
+
+<h3>Lista de Medicamentos</h3>
+
+@if (medicamentos == null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Fecha Vencimiento</th>
+                <th>Stock</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in medicamentos)
+            {
+                <tr>
+                    <td>@m.Id_medicamento</td>
+                    <td>@m.Nombre</td>
+                    <td>@m.Tipo</td>
+                    <td>@(m.Fecha_vencimiento == DateTime.MinValue ? "Sin fecha" : m.Fecha_vencimiento.ToString("dd/MM/yyyy"))</td>
+                    <td>@m.Stock</td>
+                    <td>@m.estado</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Medicamento>? medicamentos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        medicamentos = await Http.GetFromJsonAsync<List<Medicamento>>("api/medicamentos");
+    }
+
+    public class Medicamento
+    {
+        public int Id_medicamento { get; set; }
+        public string? Nombre { get; set; }
+        public string? Tipo { get; set; }
+        public DateTime Fecha_vencimiento { get; set; }
+        public int Stock { get; set; }
+        public int estado { get; set; }
+    }
+}

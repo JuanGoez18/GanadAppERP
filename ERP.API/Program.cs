@@ -1,4 +1,11 @@
+using ERP.API.Data;               // 👈
+using Microsoft.EntityFrameworkCore; // 👈
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Conexión a PostgreSQL
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Controllers (para que se habiliten tus controladores)
 builder.Services.AddControllers();
@@ -25,11 +32,7 @@ var app = builder.Build();
 app.UseCors("AllowBlazor");
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
-
-
 
 if (app.Environment.IsDevelopment())
 {
@@ -37,9 +40,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
-
-// Mapea controladores (¡clave!)
+// Mapea controladores
 app.MapControllers();
 
 app.Run();
+
