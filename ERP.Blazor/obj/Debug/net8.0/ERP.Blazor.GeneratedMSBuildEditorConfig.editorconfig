@@ -32,6 +32,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Pages/Medicamentos.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWVkaWNhbWVudG9zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Pages/Productos.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdG9zLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
