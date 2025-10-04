@@ -9,10 +9,10 @@ namespace ERP.API.Models
     {
         [Key]
         [Column("id_sesiones")]
-        public int Id_Sesion { get; set; }
+        public int id_sesion { get; set; }
 
         [Column("id_usuario")]
-        public int Id_Usuario { get; set; }
+        public int id_usuario { get; set; }
 
         [Column("fecha_ingreso")]
         public DateTime Fecha_Ingreso { get; set; }
@@ -21,7 +21,7 @@ namespace ERP.API.Models
         public TimeSpan Hora_Ingreso { get; set; }
 
         // Relación con Usuario
-        [ForeignKey("Id_Usuario")]
+        [ForeignKey("id_usuario")]
         public Usuario Usuario { get; set; }
     }
 }

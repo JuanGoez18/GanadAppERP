@@ -2064,6 +2064,6 @@ C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.
 C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.0\refint\ERP.Blazor.dll
 C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.0\ERP.Blazor.pdb
 C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.0\ref\ERP.Blazor.dll
-C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.0\compressed\9z7rbvksge-inog09z5dx.gz
-C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.0\compressed\gi4y7aqfng-2y0mpjjogk.gz
-C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.0\compressed\csfhm5g9jr-mwbf8goov9.gz
+C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.0\compressed\9z7rbvksge-h8isvmut1e.gz
+C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.0\compressed\gi4y7aqfng-55arecj3q0.gz
+C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.0\compressed\csfhm5g9jr-zmnqh9n695.gz

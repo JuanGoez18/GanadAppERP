@@ -1,0 +1,60 @@
+@page "/usuarios"
+@inject HttpClient Http
+
+<h3>Lista de Usuarios</h3>
+
+@if (usuarios == null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Email</th>
+                <th>Estado</th>
+                <th>Rol</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in usuarios)
+            {
+                <tr>
+                    <td>@u.Id</td>
+                    <td>@u.Nombre</td>
+                    <td>@u.Edad</td>
+                    <td>@u.Email</td>
+                    <td>@(u.Estado ? "Activo" : "Inactivo")</td>
+                    <td>@u.Rol</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    // Lista para almacenar los usuarios
+    private List<Usuario>? usuarios;
+
+    // Cargar datos al iniciar la página
+    protected override async Task OnInitializedAsync()
+    {
+        usuarios = await Http.GetFromJsonAsync<List<Usuario>>("api/usuarios");
+    }
+
+    // Clase que representa el usuario (modelo simplificado)
+    public class Usuario
+    {
+        public int Id { get; set; }
+        public string? Nombre { get; set; }
+        public int Edad { get; set; }
+        public string? Email { get; set; }
+        public bool Estado { get; set; }
+        public string? Rol { get; set; }
+    }
+}
+

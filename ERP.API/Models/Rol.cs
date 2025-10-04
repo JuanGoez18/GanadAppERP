@@ -9,12 +9,12 @@ namespace ERP.API.Models
     {
         [Key]
         [Column("id_roles")]
-        public int Id { get; set; }
+        public int id_roles { get; set; }
 
         [Column("nombre_rol")]
-        public string Nombre { get; set; }
+        public string nombre_rol { get; set; }
 
         public ICollection<Usuario> Usuarios { get; set; }
     }
-
 }
+
