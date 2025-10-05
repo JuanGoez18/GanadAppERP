@@ -1,0 +1,122 @@
+@page "/"
+@layout ERP.Blazor.Shared.EmptyLayout
+
+<PageTitle>Bienvenido - ERP GanadApp</PageTitle>
+
+<div class="all-container">
+    <header class="welcome-header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h1 class="logo">GanadApp</h1>
+            <nav>
+                <a href="/registro" class="btn-header">Registro</a>
+                <a href="/login" class="btn-header btn-outline">Iniciar Sesión</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="welcome-hero">
+        <div class="container text-center">
+            <h2>Gestión ganadera moderna y eficiente.</h2>
+            <p>
+                GanadApp ERP es una solución integral para digitalizar y optimizar tu producción ganadera.
+                Administra productos, controla inventario y mejora la toma de decisiones.
+            </p>
+        </div>
+    </section>
+
+    <!-- <section class="container-imagenpromo"></section> -->
+
+    <!-- Sección de Funcionalidades -->
+    <section class="features-section py-0">
+        <div class="container-herramientas">
+            <h2 class="text-center mb-4">Herramientas que te facilitan la vida</h2>
+            <div class="row text-center">
+                <div class="col-md-4 mb-4">
+                    <img src="images/500x500.jpg" class="feature-icon mb-3" alt="Registro de Ventas">
+                    <h5>Registro de Ventas y Compras</h5>
+                    <p>Controla todas las transacciones de tu ganadería con facilidad y en tiempo real.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <img src="images/500x500.jpg" class="feature-icon mb-3" alt="Estadísticas">
+                    <h5>Estadísticas y Reportes</h5>
+                    <p>Toma decisiones informadas gracias a gráficos y reportes automáticos.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <img src="images/500x500.jpg" class="feature-icon mb-3" alt="Inventario">
+                    <h5>Gestión de Inventario</h5>
+                    <p>Administra tus productos, controla existencias y evita pérdidas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container-imagenpromo">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-3 mb-3">
+                    <h2>+500</h2>
+                    <p>Usuarios Activos</p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h2>+10K</h2>
+                    <p>Registros Procesados</p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h2>98%</h2>
+                    <p>Clientes Satisfechos</p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h2>24/7</h2>
+                    <p>Soporte Disponible</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Beneficios / Datos -->
+    <!-- <section class="stats-section py-5 bg-light">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-3 mb-3">
+                    <h2 class="text-primary fw-bold">+500</h2>
+                    <p>Usuarios Activos</p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h2 class="text-primary fw-bold">+10K</h2>
+                    <p>Registros Procesados</p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h2 class="text-primary fw-bold">98%</h2>
+                    <p>Clientes Satisfechos</p>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h2 class="text-primary fw-bold">24/7</h2>
+                    <p>Soporte Disponible</p>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <footer class="welcome-footer">
+        <div class="container-footer">
+            <div class="iz"><p>© 2025 GanadApp. Todos los derechos reservados.</p></div>
+            <div class="de"><p>📍 Dirección: CR 73 #85-11 | 📞 Tel: +57 300 538 6979 | ✉️ contacto@ganadapp.com</p></div>
+        </div>
+    </footer>
+</div>
+
+
+@code {
+    private void IrARegistro()
+    {
+        Navigation.NavigateTo("/registro");
+    }
+
+    private void IrALogin()
+    {
+        Navigation.NavigateTo("/login");
+    }
+
+    [Inject]
+    public NavigationManager Navigation { get; set; } = default!;
+}

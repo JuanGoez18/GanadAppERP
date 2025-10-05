@@ -101,3 +101,200 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+/* MY CSS GANADAPP ERP */
+
+
+/* 🎨 Colores base */
+:root {
+    --font-title: 'Montserrat', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+
+    --naranja: #ff7b00;
+    --naranja-oscuro: #e06900;
+    --blanco: #ffffff;
+    --gris: #f5f5f5;
+    --texto: #333333;
+}
+
+
+
+/* 🔝 Header */
+.welcome-header {
+    background-color: var(--blanco);
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.welcome-header .logo {
+    font-family: var(--font-title);
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--naranja);
+    margin: 0;
+}
+
+.welcome-header nav .btn-header {
+    margin-left: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    background-color: var(--naranja);
+    color: var(--blanco);
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-family: var(--font-body);
+}
+
+.welcome-header nav .btn-header:hover {
+    background-color: var(--naranja-oscuro);
+}
+
+.welcome-header nav .btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--naranja);
+    color: var(--naranja);
+}
+
+.welcome-header nav .btn-outline:hover {
+    background-color: var(--naranja);
+    color: var(--blanco);
+}
+
+/* 🧠 Sección hero */
+.welcome-hero {
+    background: linear-gradient(135deg, var(--naranja), var(--naranja-oscuro));
+    color: var(--blanco);
+    padding: 5rem 1rem;
+    font-family: var(--font-body);
+}
+
+.welcome-hero h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-title);
+    font-weight: 700;
+}
+
+.welcome-hero p {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.container-imagenpromo {
+    background-image: url('/images/1.png');
+    background-size: cover;        /* Para que ocupe toda la sección */
+    background-position: center;   /* Centrar la imagen */
+    background-repeat: no-repeat;  /* Evitar repeticiones */
+    color: var(--blanco);                  /* Si el fondo es oscuro, el texto debe ser claro */
+    padding: 100px 20px;           /* Espaciado interno */
+    text-align: center;           /* Centra el contenido */
+    position: relative;
+    font-family: var(--font-body);
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    height: 700px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-imagenpromo .container h2{
+    font-family: var(--font-title);
+    font-size: 50px;
+    font-weight: 800;
+    color: var(--naranja-oscuro);
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/*  Heramientas */
+.container-herramientas {
+    margin: 3rem;
+}
+
+.container-herramientas img {
+    width: 250px;
+    height: 250px;
+    border-radius: 10px;
+    margin-top: 2rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+
+/*  Footer */
+.welcome-footer {
+    font-family: var(--font-body);
+    background-color: var(--gris);
+    padding: 1rem 0;
+    font-size: 0.9rem;
+    color: var(--texto);
+}
+
+.container-footer {
+    display: flex;
+}
+
+.container-footer .iz{
+    width: 60%;
+}
+
+.container-footer .de{
+    width: 40%;
+}
+
+.welcome-footer p {
+    margin: 0.3rem ;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+    .welcome-header .container {
+        flex-direction: column;
+    }
+
+    .welcome-header nav {
+        margin-top: 1rem;
+    }
+
+    .welcome-hero h2 {
+        font-size: 1.8rem;
+    }
+
+    .welcome-footer {
+        font-size: 10px;
+    }
+
+    .welcome-header .logo {
+        margin-bottom: 2rem;
+    }
+
+    .container-footer .iz{
+        width: 40%;
+    }
+
+    .container-footer .de{
+        width: 60%;
+    }
+
+    .container-herramientas img {
+        width: 300px;
+        height: 300px;
+    }
+
+    .container-footer {
+        flex-direction: column-reverse;
+    }
+}
+
+@media (max-width: 850px){
+    .container-herramientas img {
+        width: 200px;
+        height: 200px;
+        transform: scale(1.05);
+    }
+}
