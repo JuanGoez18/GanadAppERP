@@ -1,0 +1,30 @@
+@page "/login"
+@layout ERP.Blazor.Shared.EmptyLayout
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="text-center mb-5">Iniciar Sesión</h2>
+
+        <div class="card-input">
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo Electrónico</label>
+                <input type="email" id="email" class="form-control" placeholder="ejemplo@correo.com" />
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" id="password" class="form-control" placeholder="********" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        </div>
+
+        <div class="text-center mt-3">
+            <span>¿No tienes cuenta?</span>
+            <a href="/registro" class="link-primary">Regístrate</a>
+        </div>
+    </div>
+    <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path d="M0,160 C480,240 960,80 1440,160 L1440,320 L0,320 Z"></path>
+    </svg>
+</div>

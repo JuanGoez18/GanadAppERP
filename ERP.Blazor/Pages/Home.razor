@@ -1,7 +1,28 @@
 ﻿@page "/home"
+@layout MainLayout
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, Sapas!</h1>
+<div class="dashboard">
+    @if (seccionActual == "inicio")
+    {
+        <Inicio />
+    }
+    else if (seccionActual == "ventas")
+    {
+        <Ventas />
+    }
+    else if (seccionActual == "usuarios")
+    {
+        <Usuarios />
+    }
+</div>
 
-Welcome to all chisme.
+@code {
+    private string seccionActual = "inicio";
+
+    public void CambiarSeccion(string nombre)
+    {
+        seccionActual = nombre;
+    }
+}

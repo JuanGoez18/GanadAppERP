@@ -33,6 +33,14 @@
       "PackagePath": "staticwebassets\\icon-192.png"
     },
     {
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\images\\1.png",
+      "PackagePath": "staticwebassets\\images\\1.png"
+    },
+    {
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\images\\500x500.jpg",
+      "PackagePath": "staticwebassets\\images\\500x500.jpg"
+    },
+    {
       "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
     },

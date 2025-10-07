@@ -1,0 +1,34 @@
+@inherits LayoutComponentBase
+
+<div class="all-container">
+    <!-- Header -->
+    <header class="main-header">
+        <div class="logo">GanadApp ERP <span>System</span></div>
+        <nav class="top-nav">
+            <a href="#">Perfil</a>
+            <a href="#">Notificaciones</a>
+            <a href="#">Cerrar Sesión</a>
+        </nav>
+    </header>
+
+    <!-- Layout -->
+    <div class="layout">
+        <aside class="sidebar">
+            <nav>
+                <ul>
+                    <li><NavLink href="/inico" Match="NavLinkMatch.All" activeClass="active">Inicio</NavLink></li>
+                    <li><NavLink href="/inventario" Match="NavLinkMatch.All" activeClass="active">Inventario</NavLink></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            @Body
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <p>© 2025 GanadApp. Todos los derechos reservados.</p>
+    </footer>
+</div>

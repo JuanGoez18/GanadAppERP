@@ -34,6 +34,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/HomePages/Inicio.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZVBhZ2VzXEluaWNpby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/HomePages/Inventario.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZVBhZ2VzXEludmVudGFyaW8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/Medicamentos.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWVkaWNhbWVudG9zLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -42,8 +54,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdG9zLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/Registro.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0cm8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Shared/EmptyLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEVtcHR5TGF5b3V0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/_Imports.razor]
