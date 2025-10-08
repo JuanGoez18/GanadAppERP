@@ -126,7 +126,49 @@ code {
     --dark: #1f1f1f;
     --texto: #333333;
     --nav: #2e2e2e;
+    --messagesucce: #28a745;
+    --messagecauti: #d86d25;
+    --messageerror: #dc3545;
 }
+
+/*########################################################################################################################*/
+/* VISTA VIENVENIDA  */
+
+.toast-message {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 500;
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: slide-in 0.4s ease-out forwards;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.toast-message.success {
+    background-color: var(--messagesucce);
+}
+
+.toast-message.caution {
+    background-color: var(--messagecauti);
+}
+
+.toast-message.error {
+    background-color: var(--messageerror);
+}
+
+@keyframes slide-in {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
 
 /*########################################################################################################################*/
 /* VISTA VIENVENIDA  */

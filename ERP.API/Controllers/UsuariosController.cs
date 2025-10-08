@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ERP.API.Data;
 using ERP.API.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace ERP.API.Controllers
 {
@@ -23,6 +24,9 @@ namespace ERP.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            if (!System.Text.RegularExpressions.Regex.IsMatch(nuevoUsuario.Correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                return BadRequest("El formato del correo es inválido.");
+
             // Verificar si ya existe el correo
             var existente = await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.Correo == nuevoUsuario.Correo);
@@ -30,10 +34,20 @@ namespace ERP.API.Controllers
             if (existente != null)
                 return Conflict("El correo ya está registrado.");
 
-            // ⚠️ Aquí puedes agregar lógica extra: encriptar contraseña, validar datos, etc.
+            // Verificar si ya contraseña es segura
+            if (nuevoUsuario.Contrasena.Length < 7 ||
+                 !nuevoUsuario.Contrasena.Any(char.IsLetter) ||
+                 !nuevoUsuario.Contrasena.Any(char.IsDigit))
+            {
+                return BadRequest("La contraseña no cumple con los requisitos mínimos.");
+            }
 
-            nuevoUsuario.Estado_Cuenta = true; // Activo por defecto
-            nuevoUsuario.Rol = 3;      // Rol por defecto
+            // Encriptar contraseña
+            var hasher = new PasswordHasher<Usuario>();
+            nuevoUsuario.Contrasena = hasher.HashPassword(nuevoUsuario, nuevoUsuario.Contrasena);
+
+            nuevoUsuario.Estado_Cuenta = true;
+            nuevoUsuario.Rol = 3;
 
             _context.Usuarios.Add(nuevoUsuario);
             await _context.SaveChangesAsync();

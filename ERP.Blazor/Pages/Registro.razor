@@ -15,6 +15,11 @@
             </div>
 
             <div class="mb-3">
+                <label for="cc" class="form-label">Documento de Identidad</label>
+                <input type="text" id="cc" class="form-control" placeholder="1001223334" @bind="cc" />
+            </div>
+
+            <div class="mb-3">
                 <label for="email" class="form-label">Correo Electrónico</label>
                 <input type="email" id="email" class="form-control" placeholder="ejemplo@correo.com" @bind="correo" />
             </div>
@@ -32,11 +37,6 @@
             <button @onclick="RegistrarUsuario" class="btn btn-primary w-100">Registrarme</button>
         </div>
 
-        @if (!string.IsNullOrEmpty(mensaje))
-        {
-            <div class="alert alert-info mt-3">@mensaje</div>
-        }
-
         <div class="text-center mt-3">
             <span>¿Ya tienes cuenta?</span>
             <a href="/login" class="link-primary">Iniciar Sesión</a>
@@ -48,37 +48,89 @@
     </svg>
 </div>
 
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    <div class="toast-message @toastClass">
+        @mensaje
+    </div>
+}
+
 @code {
     private string nombre = "";
+    private string cc="";
     private string correo = "";
     private string contrasena = "";
     private string confirmar = "";
     private string mensaje = "";
+    private string toastClass = "";
 
     private async Task RegistrarUsuario()
     {
         mensaje = "";
+        toastClass = "";
 
         if (string.IsNullOrWhiteSpace(nombre) ||
             string.IsNullOrWhiteSpace(correo) ||
-            string.IsNullOrWhiteSpace(contrasena))
+            String.IsNullOrWhiteSpace(cc) ||
+            string.IsNullOrWhiteSpace(contrasena) ||
+            string.IsNullOrWhiteSpace(confirmar))
         {
-            mensaje = "❌ Todos los campos son obligatorios";
+            MostrarNotificacion("Cuidado: Todos los campos son obligatorios", "caution");
+            return;
+        }
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+        {
+            MostrarNotificacion("Cuidado: Ingresa un correo válido", "caution");
+            return;
+        }
+
+        if (nombre.Length > 20)
+        {
+            MostrarNotificacion("Cuidado: Nombre demaciado extenso","caution");
+            return;
+        }
+
+        if (cc.Length >10)
+        {
+            MostrarNotificacion("Cuidado: Ingresa un documento de identidad válido","caution");
+            return;
+        }
+
+        if (nombre.Any(char.IsDigit))
+        {
+            MostrarNotificacion("Cuidado: Nombre solo con texto","caution");
+            return;
+        }
+
+        if (contrasena.Length < 7)
+        {
+            MostrarNotificacion("Cuidado: La contraseña minimo 7 caracteres", "caution");
+            return;
+        }
+
+        bool tieneLetra = contrasena.Any(char.IsLetter);
+        bool tieneNumero = contrasena.Any(char.IsDigit);
+
+        if (!tieneLetra || !tieneNumero)
+        {
+            MostrarNotificacion("Cuidado: La contraseña debe incluir letras y números", "caution");
             return;
         }
 
         if (contrasena != confirmar)
         {
-            mensaje = "❌ Las contraseñas no coinciden";
+            MostrarNotificacion("Cuidado: Las contraseñas no coinciden", "caution");
             return;
         }
 
-        var usuario = new  RegistroRequest
+        var usuario = new RegistroRequest
         {
             Nombre = nombre,
-            Apellido = "",      // puedes dejarlo vacío si no usas
+            Apellido = "",
             Correo = correo,
-            Contrasena = contrasena
+            Contrasena = contrasena,
+            CC = cc
         };
 
         try
@@ -86,20 +138,34 @@
             var response = await Http.PostAsJsonAsync("http://localhost:5223/api/usuarios/registro", usuario);
             if (response.IsSuccessStatusCode)
             {
-                mensaje = "✅ Usuario registrado correctamente";
-                await Task.Delay(2000);
+                MostrarNotificacion("Correcto: Usuario registrado correctamente", "success");
+                StateHasChanged();
+                await Task.Delay(3000);
                 Nav.NavigateTo("/login");
             }
             else
             {
                 var error = await response.Content.ReadAsStringAsync();
-                mensaje = "❌ Error: " + error;
+                MostrarNotificacion("Ups! Error del servidor: " + error, "error");
+                Console.Error.WriteLine("Error completo API: " + error);
             }
         }
         catch (Exception ex)
         {
-            mensaje = "❌ Error: " + ex.Message;
+            MostrarNotificacion("Ups! Error inesperado ", "error");
+            Console.Error.WriteLine("Excepción: " + ex.ToString());
         }
     }
-}
 
+    private void MostrarNotificacion(string texto, string tipo)
+    {
+        mensaje = texto;
+        toastClass = tipo;
+        InvokeAsync(async () =>
+        {
+            await Task.Delay(3000);
+            mensaje = "";
+            StateHasChanged();
+        });
+    }
+}
