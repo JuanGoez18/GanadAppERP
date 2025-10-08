@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "3E157X8N51g=",
+  "dgSpecHash": "CBvRSnuH6SY=",
   "success": true,
   "projectFilePath": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.API\\ERP.API.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\ADMIN\\.nuget\\packages\\dnsclient\\1.8.0\\dnsclient.1.8.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.19\\microsoft.aspnetcore.openapi.8.0.19.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",

@@ -1,5 +1,7 @@
 @page "/login"
 @layout ERP.Blazor.Shared.EmptyLayout
+@inject HttpClient Http
+@inject NavigationManager Nav
 
 <div class="auth-container">
     <div class="auth-card">
@@ -8,15 +10,15 @@
         <div class="card-input">
             <div class="mb-3">
                 <label for="email" class="form-label">Correo Electrónico</label>
-                <input type="email" id="email" class="form-control" placeholder="ejemplo@correo.com" />
+                <input type="email" id="email" class="form-control" placeholder="ejemplo@correo.com" @bind="correo" />
             </div>
 
             <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
-                <input type="password" id="password" class="form-control" placeholder="********" />
+                <input type="password" id="password" class="form-control" placeholder="********" @bind="contrasena" />
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+            <button @onclick="IniciarSesion" class="btn btn-primary w-100">Entrar</button>
         </div>
 
         <div class="text-center mt-3">
@@ -24,7 +26,68 @@
             <a href="/registro" class="link-primary">Regístrate</a>
         </div>
     </div>
+
     <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
         <path d="M0,160 C480,240 960,80 1440,160 L1440,320 L0,320 Z"></path>
     </svg>
 </div>
+
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    <div class="toast-message @toastClass">
+        @mensaje
+    </div>
+}
+
+@code {
+    private string correo = "";
+    private string contrasena = "";
+    private string mensaje = "";
+    private string toastClass = "";
+
+    private async Task IniciarSesion()
+    {
+        if (string.IsNullOrWhiteSpace(correo) || string.IsNullOrWhiteSpace(contrasena))
+        {
+            MostrarNotificacion("Cuidado: Todos los campos son obligatorios", "caution");
+            return;
+        }
+
+        var loginData = new { Correo = correo, Contrasena = contrasena };
+
+        try
+        {
+            var response = await Http.PostAsJsonAsync("http://localhost:5223/api/usuarios/login", loginData);
+
+            if (response.IsSuccessStatusCode)
+            {
+                MostrarNotificacion("Bienvenido 👋", "success");
+                await Task.Delay(2000);
+                Nav.NavigateTo("/home");
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                MostrarNotificacion("Error: " + error, "error");
+                Console.Error.WriteLine("Login Error: " + error);
+            }
+        }
+        catch (Exception ex)
+        {
+            MostrarNotificacion("Ups! Error de conexión", "error");
+            Console.Error.WriteLine("Excepción: " + ex);
+        }
+    }
+
+    private void MostrarNotificacion(string texto, string tipo)
+    {
+        mensaje = texto;
+        toastClass = tipo;
+        InvokeAsync(async () =>
+        {
+            await Task.Delay(3000);
+            mensaje = "";
+            StateHasChanged();
+        });
+    }
+}

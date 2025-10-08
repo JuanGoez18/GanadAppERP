@@ -203,3 +203,4 @@ C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.API\obj\Debug\net8.0\refint\ERP.
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.API\obj\Debug\net8.0\ERP.API.pdb
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.API\obj\Debug\net8.0\ERP.API.genruntimeconfig.cache
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.API\obj\Debug\net8.0\ref\ERP.API.dll
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.API\bin\Debug\net8.0\DnsClient.dll
