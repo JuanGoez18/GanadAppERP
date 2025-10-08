@@ -1,5 +1,8 @@
 @page "/registro"
 @layout ERP.Blazor.Shared.EmptyLayout
+@using ERP.Blazor.Models
+@inject HttpClient Http
+@inject NavigationManager Nav
 
 <div class="auth-container">
     <div class="auth-card">
@@ -8,33 +11,95 @@
         <div class="card-input">
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre Completo</label>
-                <input type="text" id="nombre" class="form-control" placeholder="Ej: Juan Pérez" />
+                <input type="text" id="nombre" class="form-control" placeholder="Ej: Juan Pérez" @bind="nombre" />
             </div>
 
             <div class="mb-3">
                 <label for="email" class="form-label">Correo Electrónico</label>
-                <input type="email" id="email" class="form-control" placeholder="ejemplo@correo.com" />
+                <input type="email" id="email" class="form-control" placeholder="ejemplo@correo.com" @bind="correo" />
             </div>
 
             <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
-                <input type="password" id="password" class="form-control" placeholder="********" />
+                <input type="password" id="password" class="form-control" placeholder="********" @bind="contrasena" />
             </div>
 
             <div class="mb-3">
                 <label for="confirm" class="form-label">Confirmar Contraseña</label>
-                <input type="password" id="confirm" class="form-control" placeholder="********" />
+                <input type="password" id="confirm" class="form-control" placeholder="********" @bind="confirmar" />
             </div>
 
-            <button type="submit" class="btn btn-primary w-100">Registrarme</button>
+            <button @onclick="RegistrarUsuario" class="btn btn-primary w-100">Registrarme</button>
         </div>
+
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <div class="alert alert-info mt-3">@mensaje</div>
+        }
 
         <div class="text-center mt-3">
             <span>¿Ya tienes cuenta?</span>
             <a href="/login" class="link-primary">Iniciar Sesión</a>
         </div>
     </div>
+
     <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
         <path d="M0,160 C480,240 960,80 1440,160 L1440,320 L0,320 Z"></path>
     </svg>
 </div>
+
+@code {
+    private string nombre = "";
+    private string correo = "";
+    private string contrasena = "";
+    private string confirmar = "";
+    private string mensaje = "";
+
+    private async Task RegistrarUsuario()
+    {
+        mensaje = "";
+
+        if (string.IsNullOrWhiteSpace(nombre) ||
+            string.IsNullOrWhiteSpace(correo) ||
+            string.IsNullOrWhiteSpace(contrasena))
+        {
+            mensaje = "❌ Todos los campos son obligatorios";
+            return;
+        }
+
+        if (contrasena != confirmar)
+        {
+            mensaje = "❌ Las contraseñas no coinciden";
+            return;
+        }
+
+        var usuario = new  RegistroRequest
+        {
+            Nombre = nombre,
+            Apellido = "",      // puedes dejarlo vacío si no usas
+            Correo = correo,
+            Contrasena = contrasena
+        };
+
+        try
+        {
+            var response = await Http.PostAsJsonAsync("http://localhost:5223/api/usuarios/registro", usuario);
+            if (response.IsSuccessStatusCode)
+            {
+                mensaje = "✅ Usuario registrado correctamente";
+                await Task.Delay(2000);
+                Nav.NavigateTo("/login");
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                mensaje = "❌ Error: " + error;
+            }
+        }
+        catch (Exception ex)
+        {
+            mensaje = "❌ Error: " + ex.Message;
+        }
+    }
+}
+

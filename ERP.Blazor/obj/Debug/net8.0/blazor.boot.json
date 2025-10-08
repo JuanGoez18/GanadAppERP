@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "ERP.Blazor",
   "resources": {
-    "hash": "sha256-3Suurblf2etWMv8PJNXnKWSOii539oM9/2V3bKBWPvY=",
+    "hash": "sha256-9v9rvysacxhugj1RPL9Dw1myJ8mXGCGxo+c8vHrbiOY=",
     "jsModuleNative": {
       "dotnet.native.8.0.19.6i15506dkg.js": "sha256-O/NCYcAN9uPocD7ns7AzF/cqx7f5vL1PTJCQs0vEXyk="
     },
@@ -208,10 +208,10 @@
       "mscorlib.wasm": "sha256-RLW/7NVuhoPfq151II3kX2kWHgBwQgpCw9aemQNg3to=",
       "netstandard.wasm": "sha256-lAg5WvTiA8wbsIwlr51xh0YWpXT9F5EX3Cnv+11O/mU=",
       "System.Private.CoreLib.wasm": "sha256-3O3muuRQwoLRecYRjfIFWUURvTjP4EmD2O8wYg2UDNY=",
-      "ERP.Blazor.wasm": "sha256-W9cNfxazf2MvDF14ac7PtYUCNaXdz/M2oXdg+kUq0H8="
+      "ERP.Blazor.wasm": "sha256-46Qg1KMCql/IUwC9/Hito8rxCLzbJ0yrR/MJ109ZNQs="
     },
     "pdb": {
-      "ERP.Blazor.pdb": "sha256-K/Wg2pxg1MHVVt1RsBM3j4SgdjipaIUKyHQt8rkd7lU="
+      "ERP.Blazor.pdb": "sha256-wOGwsISPm/35lASXBuywh4pbY+j2yLtbZnkDZj3BsIY="
     }
   },
   "cacheBootResources": true,

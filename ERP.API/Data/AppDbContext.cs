@@ -7,12 +7,11 @@ namespace ERP.API.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<Medicamento> Medicamentos { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Opcional: configuración Fluent API si quieres más control
-            modelBuilder.Entity<Medicamento>().ToTable("medicamentos");
+            
         }
     }
 }
