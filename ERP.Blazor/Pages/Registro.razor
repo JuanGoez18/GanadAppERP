@@ -11,27 +11,27 @@
         <div class="card-input">
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre Completo</label>
-                <input type="text" id="nombre" class="form-control" placeholder="Ej: Juan Pérez" @bind="nombre" />
+                <input type="text" id="nombre" class="form-control" placeholder="Ej: Juan Pérez" @bind="nombre"/>
             </div>
 
             <div class="mb-3">
                 <label for="cc" class="form-label">Documento de Identidad</label>
-                <input type="text" id="cc" class="form-control" placeholder="1001223334" @bind="cc" />
+                <input type="text" id="cc" class="form-control" placeholder="1001223334" @bind="cc"/>
             </div>
 
             <div class="mb-3">
                 <label for="email" class="form-label">Correo Electrónico</label>
-                <input type="email" id="email" class="form-control" placeholder="ejemplo@correo.com" @bind="correo" />
+                <input type="email" id="email" class="form-control" placeholder="ejemplo@correo.com" @bind="correo"/>
             </div>
 
             <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
-                <input type="password" id="password" class="form-control" placeholder="********" @bind="contrasena" />
+                <input type="password" id="password" class="form-control" placeholder="********" @bind="contrasena"/>
             </div>
 
             <div class="mb-3">
                 <label for="confirm" class="form-label">Confirmar Contraseña</label>
-                <input type="password" id="confirm" class="form-control" placeholder="********" @bind="confirmar" />
+                <input type="password" id="confirm" class="form-control" placeholder="********" @bind="confirmar"/>
             </div>
 
             <button @onclick="RegistrarUsuario" class="btn btn-primary w-100">Registrarme</button>

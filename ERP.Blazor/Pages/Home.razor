@@ -1,28 +1,68 @@
 ﻿@page "/home"
 @layout MainLayout
+@using ERP.Blazor.Pages.HomePages
+
+@inject NavigationManager Nav
+@inject ERP.Blazor.Services.SesionService SesionService
 
 <PageTitle>Home</PageTitle>
 
 <div class="dashboard">
-    @if (seccionActual == "inicio")
+    @if (sesionVerificada)
     {
-        <Inicio />
+        @if (seccionActual == "inicio")
+        {
+            <Inicio />
+        }
+        else if (seccionActual == "inventario")
+        {
+            <Inventario />
+        }
     }
-    else if (seccionActual == "ventas")
+    else
     {
-        <Ventas />
-    }
-    else if (seccionActual == "usuarios")
-    {
-        <Usuarios />
+        <div class="text-center mt-5">
+            <h3>No tienes una sesión activa.</h3>
+            <p>Serás redirigido a la página de inicio...</p>
+        </div>
+        <!-- Modal centrado -->
+        <div class="modal-overlay">
+            <div class="modal-container">
+                <h2>Sesión no activa</h2>
+                <p>Para acceder al panel debes iniciar sesión primero.</p>
+                <button class="btn-modal" @onclick="VolverABienvenida">Volver</button>
+            </div>
+        </div>
     }
 </div>
 
 @code {
-    private string seccionActual = "inicio";
+    private string seccionActual;
+    private bool sesionVerificada = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var haySesion = await SesionService.HaySesionAsync();
+
+        if (!haySesion)
+        {
+            sesionVerificada = false;
+        }
+        else
+        {
+            sesionVerificada = true;
+            seccionActual = "inicio";
+        }
+    }
+
+    private void VolverABienvenida()
+    {
+        Nav.NavigateTo("/", forceLoad: true);
+    }
 
     public void CambiarSeccion(string nombre)
     {
         seccionActual = nombre;
+        StateHasChanged();
     }
 }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "VZL/jIzMnp46RNuDkwroDUzLnU0PUMQzChlj2Y4vvNA=",
+  "Hash": "NPF2W+rUfEBp9z0MyyXjokAz6yKYsIlHMz3aWuGAPho=",
   "Source": "ERP.Blazor",
   "BasePath": "/",
   "Mode": "Root",
@@ -7919,25 +7919,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\1.png"
-    },
-    {
-      "Identity": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\images\\500x500.jpg",
-      "SourceId": "ERP.Blazor",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "images/500x500.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\500x500.jpg"
     },
     {
       "Identity": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\index.html",
