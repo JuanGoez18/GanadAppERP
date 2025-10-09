@@ -1847,11 +1847,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Documentos\\TAREA📘\\🔷politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\ERP.Blazor.csproj",
+      "projectUniqueName": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\ERP.Blazor.csproj",
       "projectName": "ERP.Blazor",
-      "projectPath": "D:\\Documentos\\TAREA📘\\🔷politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\ERP.Blazor.csproj",
+      "projectPath": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\ERP.Blazor.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "D:\\Documentos\\TAREA📘\\🔷politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\obj\\",
+      "outputPath": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config"

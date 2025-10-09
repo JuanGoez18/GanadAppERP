@@ -1,43 +1,47 @@
 {
   "Files": [
     {
-      "Id": "D:\\Documentos\\TAREA\uD83D\uDCD8\\\uD83D\uDD37politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\bin\\Debug\\net8.0\\wwwroot\\_framework\\blazor.webassembly.js",
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\bin\\Debug\\net8.0\\wwwroot\\_framework\\blazor.webassembly.js",
       "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js"
     },
     {
-      "Id": "D:\\Documentos\\TAREA\uD83D\uDCD8\\\uD83D\uDD37politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\obj\\Debug\\net8.0\\compressed\\bd2jlk3dmf.gz",
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\obj\\Debug\\net8.0\\compressed\\bd2jlk3dmf.gz",
       "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js.gz"
     },
     {
-      "Id": "D:\\Documentos\\TAREA\uD83D\uDCD8\\\uD83D\uDD37politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\obj\\Debug\\net8.0\\scopedcss\\bundle\\ERP.Blazor.styles.css",
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\obj\\Debug\\net8.0\\scopedcss\\bundle\\ERP.Blazor.styles.css",
       "PackagePath": "staticwebassets\\ERP.Blazor.styles.css"
     },
     {
-      "Id": "D:\\Documentos\\TAREA\uD83D\uDCD8\\\uD83D\uDD37politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\wwwroot\\css\\app.css",
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\css\\app.css",
       "PackagePath": "staticwebassets\\css\\app.css"
     },
     {
-      "Id": "D:\\Documentos\\TAREA\uD83D\uDCD8\\\uD83D\uDD37politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
     },
     {
-      "Id": "D:\\Documentos\\TAREA\uD83D\uDCD8\\\uD83D\uDD37politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
     },
     {
-      "Id": "D:\\Documentos\\TAREA\uD83D\uDCD8\\\uD83D\uDD37politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\wwwroot\\favicon.png",
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\favicon.png",
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
-      "Id": "D:\\Documentos\\TAREA\uD83D\uDCD8\\\uD83D\uDD37politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\wwwroot\\icon-192.png",
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\icon-192.png",
       "PackagePath": "staticwebassets\\icon-192.png"
     },
     {
-      "Id": "D:\\Documentos\\TAREA\uD83D\uDCD8\\\uD83D\uDD37politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\wwwroot\\index.html",
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\images\\1.png",
+      "PackagePath": "staticwebassets\\images\\1.png"
+    },
+    {
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
     },
     {
-      "Id": "D:\\Documentos\\TAREA\uD83D\uDCD8\\\uD83D\uDD37politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\wwwroot\\sample-data\\weather.json",
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\sample-data\\weather.json",
       "PackagePath": "staticwebassets\\sample-data\\weather.json"
     },
     {

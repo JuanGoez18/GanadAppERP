@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rG5GvJO5Sf4=",
+  "dgSpecHash": "/PzR+B7oc/Y=",
   "success": true,
-  "projectFilePath": "D:\\Documentos\\TAREA📘\\🔷politecnico\\2025\\#4.2.7\\ingenieria web\\ERP GanadApp\\ERP.Blazor\\ERP.Blazor.csproj",
+  "projectFilePath": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\ERP.Blazor.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.aspnetcore.authorization\\8.0.19\\microsoft.aspnetcore.authorization.8.0.19.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.aspnetcore.components\\8.0.19\\microsoft.aspnetcore.components.8.0.19.nupkg.sha512",
