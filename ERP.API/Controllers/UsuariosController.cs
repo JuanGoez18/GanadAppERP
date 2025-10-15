@@ -85,21 +85,21 @@ namespace ERP.API.Controllers
             if (string.IsNullOrWhiteSpace(login.Correo) || string.IsNullOrWhiteSpace(login.Contrasena))
                 return BadRequest("Correo y contraseña son obligatorios.");
 
-            // Buscar usuario por correo
+            //Buscar usuario por correo
             var usuario = await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.Correo == login.Correo);
 
             if (usuario == null)
-                return Unauthorized("Correo o contraseña incorrectos.");
+                return Unauthorized("Usuario no encontrado.");
 
-            // Verificar contraseña
+            //Verificar contraseña
             var hasher = new PasswordHasher<Usuario>();
             var resultado = hasher.VerifyHashedPassword(usuario, usuario.Contrasena, login.Contrasena);
 
             if (resultado == PasswordVerificationResult.Failed)
                 return Unauthorized("Correo o contraseña incorrectos.");
 
-            // ✅ Login exitoso
+            //Login exitoso
             return Ok(new
             {
                 mensaje = "Inicio de sesión correcto",

@@ -1,0 +1,184 @@
+@page "/usuarios"
+@layout MainLayout
+@using ERP.Blazor.Models
+@inject ERP.Blazor.Services.AdminUsuarioService UsuarioService
+
+<PageTitle>Gestión de Usuarios</PageTitle>
+
+<div class="auth-container2">
+    <div class="auth-card2">
+        <h1 class="main-title">Gestión de Usuarios</h1>
+        <p class="module-description">Administra los usuarios registrados en el sistema ERP.</p>
+
+        <!-- Barra de búsqueda -->
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar usuario por nombre o correo..." @bind="filtro" />
+            <button class="btn btn-secondary" @onclick="BuscarUsuarios">Buscar</button>
+            <button class="btn btn-primary" @onclick="AbrirModalNuevo">+ Nuevo Usuario</button>
+        </div>
+
+        <!-- Tabla de usuarios -->
+        <table class="usuarios-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (usuarios == null)
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">Cargando usuarios...</td>
+                    </tr>
+                }
+                else if (usuarios.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">No se encontraron usuarios.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var u in usuarios)
+                    {
+                        <tr>
+                            <td>@u.Id</td>
+                            <td>@u.Nombre @u.Apellido</td>
+                            <td>@u.Correo</td>
+                            <td>@u.RolNombre</td>
+                            <td>
+                                <span class="estado @(u.EstadoCuenta ? "activo" : "inactivo")">
+                                    @(u.EstadoCuenta ? "Activo" : "Inactivo")
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-info" @onclick="() => EditarUsuario(u)">Editar</button>
+                                <button class="btn btn-sm btn-warning" @onclick="() => CambiarEstado(u)">
+                                    @(u.EstadoCuenta ? "Desactivar" : "Activar")
+                                </button>
+                                <button class="btn btn-sm btn-danger" @onclick="() => EliminarUsuario(u.Id)">Eliminar</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path d="M0,160 C480,240 960,80 1440,160 L1440,320 L0,320 Z"></path>
+    </svg>
+</div>
+
+<!-- Modal de creación/edición (provisional) -->
+@if (mostrarModal)
+{
+    <div class="modal-overlay">
+        <div class="modal">
+            <h3>@(usuarioEditando == null ? "Nuevo Usuario" : "Editar Usuario")</h3>
+
+            <div class="modal-body">
+                <label>Nombre</label>
+                <input type="text" @bind="form.Nombre" />
+
+                <label>Apellido</label>
+                <input type="text" @bind="form.Apellido" />
+
+                <label>Correo</label>
+                <input type="email" @bind="form.Correo" />
+
+                <label>Rol</label>
+                <select @bind="form.RolId">
+                    <option value="">Seleccione un rol</option>
+                    @foreach (var r in roles)
+                    {
+                        <option value="@r.Id">@r.NombreRol</option>
+                    }
+                </select>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
+                <button class="btn btn-success" @onclick="GuardarUsuario">Guardar</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<UsuarioDTO> usuarios = new();
+    private List<RolDTO> roles = new();
+    private UsuarioDTO form = new();
+    private UsuarioDTO? usuarioEditando;
+    private bool mostrarModal = false;
+    private string filtro = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+{
+    try
+    {
+        usuarios = await UsuarioService.ObtenerUsuariosAsync();
+        roles = await UsuarioService.ObtenerRolesAsync();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error al cargar datos: {ex.Message}");
+    }
+}
+
+    private async Task BuscarUsuarios()
+    {
+        usuarios = await UsuarioService.BuscarUsuariosAsync(filtro);
+    }
+
+    private void AbrirModalNuevo()
+    {
+        usuarioEditando = null;
+        form = new UsuarioDTO();
+        mostrarModal = true;
+    }
+
+    private void EditarUsuario(UsuarioDTO u)
+    {
+        usuarioEditando = u;
+        form = new UsuarioDTO
+        {
+            Id = u.Id,
+            Nombre = u.Nombre,
+            Apellido = u.Apellido,
+            Correo = u.Correo,
+            RolId = u.RolId,
+            EstadoCuenta = u.EstadoCuenta
+        };
+        mostrarModal = true;
+    }
+
+    private void CerrarModal() => mostrarModal = false;
+
+    private async Task GuardarUsuario()
+    {
+        if (usuarioEditando == null)
+            await UsuarioService.CrearUsuarioAsync(form);
+        else
+            await UsuarioService.ActualizarUsuarioAsync(form);
+
+        mostrarModal = false;
+        usuarios = await UsuarioService.ObtenerUsuariosAsync();
+    }
+
+    private async Task CambiarEstado(UsuarioDTO u)
+    {
+        await UsuarioService.CambiarEstadoAsync(u.Id, !u.EstadoCuenta);
+        usuarios = await UsuarioService.ObtenerUsuariosAsync();
+    }
+
+    private async Task EliminarUsuario(int id)
+    {
+        await UsuarioService.EliminarUsuarioAsync(id);
+        usuarios = await UsuarioService.ObtenerUsuariosAsync();
+    }
+}
