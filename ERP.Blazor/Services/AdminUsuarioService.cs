@@ -51,11 +51,11 @@ namespace ERP.Blazor.Services
             await _http.PutAsync($"api/AdminUsuarios/{id}/estado/{nuevoEstado}", null);
         }
 
-        // 🗑️ Eliminar usuario
+        /* 🗑️ Eliminar usuario por revisar
         public async Task EliminarUsuarioAsync(int id)
         {
             await _http.DeleteAsync($"api/AdminUsuarios/{id}");
-        }
+        } */
     }
 }
 

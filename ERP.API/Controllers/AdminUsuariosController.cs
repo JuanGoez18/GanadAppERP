@@ -34,10 +34,21 @@ namespace ERP.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> EditarUsuario(int id, [FromBody] Usuario usuario)
         {
-            if (id != usuario.Id_Usuarios)
-                return BadRequest("El ID no coincide.");
+            var usuarioExistente = await _context.Usuarios.FindAsync(id);
+            if (usuarioExistente == null)
+                return NotFound();
 
-            _context.Entry(usuario).State = EntityState.Modified;
+            // Actualiza solo los campos editables
+            usuarioExistente.Nombre = usuario.Nombre;
+            usuarioExistente.Apellido = usuario.Apellido;
+            usuarioExistente.Correo = usuario.Correo;
+            usuarioExistente.Rol = usuario.Rol;
+            usuarioExistente.Estado_Cuenta = usuario.Estado_Cuenta;
+
+            // 🔒 Solo cambia la contraseña si se envía una nueva
+            if (!string.IsNullOrEmpty(usuario.Contrasena))
+                usuarioExistente.Contrasena = usuario.Contrasena;
+
             await _context.SaveChangesAsync();
             return NoContent();
         }
@@ -52,6 +63,27 @@ namespace ERP.API.Controllers
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
             return NoContent();
+        }
+
+        [HttpGet("roles")]
+        public async Task<ActionResult<IEnumerable<RolDTO>>> GetRoles()
+        {
+            var roles = await _context.Roles.ToListAsync();
+            return Ok(roles);
+        }
+
+        //Cambiar el estado de la cuenta
+        [HttpPut("{id}/estado/{nuevoEstado}")]
+        public async Task<IActionResult> CambiarEstado(int id, bool nuevoEstado)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
+                return NotFound(new { mensaje = "Usuario no encontrado." });
+
+            usuario.Estado_Cuenta = nuevoEstado;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { mensaje = $"Estado de cuenta actualizado a {(nuevoEstado ? "Activo" : "Inactivo")}" });
         }
     }
 }

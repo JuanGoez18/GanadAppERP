@@ -19,7 +19,7 @@ namespace ERP.API.Models
         [Column("correo")]
         public string Correo { get; set; } = string.Empty;
 
-        [Column("rol_nombre")]
-        public string RolNombre { get; set; } = string.Empty;
+        [Column("rol")]
+        public string Rol { get; set; } = string.Empty;
     }
 }

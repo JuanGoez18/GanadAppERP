@@ -397,7 +397,7 @@ code {
 
 /* FIN VISTA VIENVENIDA */
 
-
+/*########################################################################################################################*/
 /*########################################################################################################################*/
 /* !FONDO ANIMADO DE LOGIN/REGISTRO  */
 
@@ -546,7 +546,7 @@ code {
     }
 }
 
-
+/*########################################################################################################################*/
 /*########################################################################################################################*/
 /* VISTAS DASHBOARD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
@@ -737,9 +737,7 @@ code {
 }
 
 /* VISTAS PAGINAS DASHBOARD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-/* MODAL NOTSESION  */
-/* === 🎨 ESTILOS PARA GESTIÓN DE USUARIOS === */
-
+/* VISTA USUARIOS  */
 
 
 /* 🔍 BARRA DE BÚSQUEDA */
@@ -816,6 +814,11 @@ code {
     color: var(--blanco);
 }
 
+.usuarios-table button {
+    float: right;
+    margin: 0 0.1rem 0 1rem;
+}
+
 
 /* 🟢 ESTADOS */
 .estado {
@@ -825,17 +828,17 @@ code {
 }
 
 .estado.activo {
-    background-color: #388e3c;
-    color: white;
+    background-color: var(--messagesucce);
+    color: var(--blanco);
 }
 
 .estado.inactivo {
-    background-color: #9e9e9e;
-    color: #1c1c1c;
+    background-color: var(--gris3);
+    color: var(--dark);
 }
 
-/* 🧩 MODAL */
-.modal-overlay {
+/* MODAL NUEVO USUARIO 🔽*/
+.modal-nuevousuario-over {
     position: fixed;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.7);
@@ -845,18 +848,18 @@ code {
     z-index: 1000;
 }
 
-.modal {
-    background-color: #212121;
-    padding: 2rem;
+.modal-nuevousuario {
+    background-color: var(--dark);
+    padding: 3rem 6rem 0 6rem;
     border-radius: 10px;
     width: 400px;
+    height: 500px;
     box-shadow: 0 0 15px rgba(0,0,0,0.6);
-    color: #f5f5f5;
 }
 
-.modal h3 {
+.modal-nuevousuario h3 {
     margin-bottom: 1rem;
-    color: #4caf50;
+    color: var(--naranja);
     text-align: center;
 }
 
@@ -867,31 +870,38 @@ code {
     margin-bottom: 1.2rem;
 }
 
-.modal-body label {
+.modal-nuevousuario-body label {
     font-size: 0.9rem;
-    color: #bdbdbd;
 }
 
-.modal-body input,
-.modal-body select {
+.modal-nuevousuario-body input,
+.modal-nuevousuario-body select {
     padding: 0.5rem;
-    border: 1px solid #555;
+    border: 1px solid var(--gris3);
     border-radius: 6px;
-    background-color: #1f1f1f;
-    color: white;
+    background-color: var(--dark);
+    color: var(--blanco);
     outline: none;
+    margin-bottom: 1rem;
 }
 
-.modal-body input:focus,
-.modal-body select:focus {
-    border-color: #4caf50;
+.modal-nuevousuario-body input:focus,
+.modal-nuevousuario-body select:focus {
+    border-color: var(--naranja);
 }
 
-.modal-footer {
+.modal-nuevousuario label,
+.modal-nuevousuario input,
+.modal-nuevousuario select {
+    color: var(--gris);
+}
+
+.modal-nuevousuario-footer {
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
 }
+/* MODAL NUEVO USUARIO 🔼*/
 
 /* 📱 RESPONSIVE */
 @media (max-width: 768px) {
@@ -909,7 +919,7 @@ code {
         font-size: 0.85rem;
     }
 
-    .modal {
+    .modal-nuevousuario {
         width: 90%;
     }
 }
@@ -919,7 +929,7 @@ code {
 /* VISTAS PAGINAS DASHBOARD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 /* MODAL NOTSESION  */
 
-.modal-overlay {
+.modal-nosesion {
     position: fixed;
     top: 0;
     left: 0;
@@ -932,7 +942,7 @@ code {
     z-index: 9999;
 }
 
-.modal-container {
+.nosesion-container {
     background: var(--gris);
     padding: 2rem;
     border-radius: 12px;
@@ -944,7 +954,7 @@ code {
     font-family: var(--font-body);
 }
 
-.modal-container h2 {
+.nosesion-container h2 {
     margin-bottom: 1rem;
     font-size: 1.3rem;
     font-family: var(--font-title);
@@ -952,7 +962,7 @@ code {
     color: var(--messageerror);
 }
 
-.btn-modal {
+.nosesion-container .btn-modal {
     background-color: var(--naranja);
     font-family: var(--font-body);
     font-weight: 700;
@@ -965,7 +975,7 @@ code {
     transition: background 0.2s;
 }
 
-.btn-modal:hover {
+.nosesion-container .btn-modal:hover {
     background-color: var(--naranja-oscuro);
 }
 

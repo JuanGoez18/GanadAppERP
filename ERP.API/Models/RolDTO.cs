@@ -7,8 +7,8 @@ namespace ERP.API.Models
     public class RolDTO
     {
         [Key]
-        [Column("id_rol")]
-        public int Id_Rol { get; set; }
+        [Column("id_roles")]
+        public int Id_Roles { get; set; }
 
         [Column("nombre_rol")]
         public string NombreRol { get; set; } = string.Empty;

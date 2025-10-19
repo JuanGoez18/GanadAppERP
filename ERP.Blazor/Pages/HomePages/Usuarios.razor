@@ -2,8 +2,25 @@
 @layout MainLayout
 @using ERP.Blazor.Models
 @inject ERP.Blazor.Services.AdminUsuarioService UsuarioService
+@inject NavigationManager Nav
+@inject ERP.Blazor.Services.SesionService SesionService
 
 <PageTitle>Gestión de Usuarios</PageTitle>
+
+@if (sesionVerificada)
+    {
+    }
+    else
+    {
+        <!-- Modal centrado -->
+        <div class="modal-nosesion">
+            <div class="nosesion-container">
+                <h2>Sesión no activa</h2>
+                <p>Para acceder al panel debes iniciar sesión primero.</p>
+                <button class="btn-modal" @onclick="VolverABienvenida">Volver</button>
+            </div>
+        </div>
+    }
 
 <div class="auth-container2">
     <div class="auth-card2">
@@ -50,7 +67,7 @@
                             <td>@u.Id</td>
                             <td>@u.Nombre @u.Apellido</td>
                             <td>@u.Correo</td>
-                            <td>@u.RolNombre</td>
+                            <td>@u.Rol</td>
                             <td>
                                 <span class="estado @(u.EstadoCuenta ? "activo" : "inactivo")">
                                     @(u.EstadoCuenta ? "Activo" : "Inactivo")
@@ -61,7 +78,6 @@
                                 <button class="btn btn-sm btn-warning" @onclick="() => CambiarEstado(u)">
                                     @(u.EstadoCuenta ? "Desactivar" : "Activar")
                                 </button>
-                                <button class="btn btn-sm btn-danger" @onclick="() => EliminarUsuario(u.Id)">Eliminar</button>
                             </td>
                         </tr>
                     }
@@ -77,11 +93,11 @@
 <!-- Modal de creación/edición (provisional) -->
 @if (mostrarModal)
 {
-    <div class="modal-overlay">
-        <div class="modal">
+    <div class="modal-nuevousuario-over">
+        <div class="modal-nuevousuario">
             <h3>@(usuarioEditando == null ? "Nuevo Usuario" : "Editar Usuario")</h3>
 
-            <div class="modal-body">
+            <div class="modal-nuevousuario-body">
                 <label>Nombre</label>
                 <input type="text" @bind="form.Nombre" />
 
@@ -92,16 +108,16 @@
                 <input type="email" @bind="form.Correo" />
 
                 <label>Rol</label>
-                <select @bind="form.RolId">
+                <select @bind="form.Rol">
                     <option value="">Seleccione un rol</option>
                     @foreach (var r in roles)
                     {
-                        <option value="@r.Id">@r.NombreRol</option>
+                        <option value="@r.Id_Roles">@r.Id_Roles @r.NombreRol</option>
                     }
                 </select>
             </div>
 
-            <div class="modal-footer">
+            <div class="modal-nuevousuario-footer">
                 <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
                 <button class="btn btn-success" @onclick="GuardarUsuario">Guardar</button>
             </div>
@@ -118,17 +134,22 @@
     private string filtro = string.Empty;
 
     protected override async Task OnInitializedAsync()
-{
-    try
     {
-        usuarios = await UsuarioService.ObtenerUsuariosAsync();
-        roles = await UsuarioService.ObtenerRolesAsync();
+        try
+        {
+            usuarios = await UsuarioService.ObtenerUsuariosAsync();
+            roles = await UsuarioService.ObtenerRolesAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al cargar datos: {ex.Message}");
+        }
     }
-    catch (Exception ex)
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        Console.WriteLine($"Error al cargar datos: {ex.Message}");
+        await VerificaodorSesion();
     }
-}
 
     private async Task BuscarUsuarios()
     {
@@ -151,7 +172,7 @@
             Nombre = u.Nombre,
             Apellido = u.Apellido,
             Correo = u.Correo,
-            RolId = u.RolId,
+            Rol = u.Rol,
             EstadoCuenta = u.EstadoCuenta
         };
         mostrarModal = true;
@@ -175,10 +196,32 @@
         await UsuarioService.CambiarEstadoAsync(u.Id, !u.EstadoCuenta);
         usuarios = await UsuarioService.ObtenerUsuariosAsync();
     }
-
+    /* por revisar
     private async Task EliminarUsuario(int id)
     {
         await UsuarioService.EliminarUsuarioAsync(id);
         usuarios = await UsuarioService.ObtenerUsuariosAsync();
+    }*/
+
+    //VERIFICAR SEASION
+    private bool sesionVerificada = true;
+
+    private async Task VerificaodorSesion()
+    {
+        var haySesion = await SesionService.HaySesionAsync();
+
+        if (!haySesion)
+        {
+            sesionVerificada = false;
+        }
+        else
+        {
+            sesionVerificada = true;
+        }
+    }
+
+    private void VolverABienvenida()
+    {
+        Nav.NavigateTo("/", forceLoad: true);
     }
 }

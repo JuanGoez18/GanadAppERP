@@ -22,10 +22,10 @@ namespace ERP.Blazor.Models
         [JsonPropertyName("rolNombre")]
         public string? RolNombre { get; set; }
 
-        [JsonPropertyName("estadoCuenta")]
+        [JsonPropertyName("estado_Cuenta")]
         public bool EstadoCuenta { get; set; }
 
-        [JsonPropertyName("rolId")]
-        public int RolId { get; set; }
+        [JsonPropertyName("rol")]
+        public int Rol { get; set; }
     }
 }
