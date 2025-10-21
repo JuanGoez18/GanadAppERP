@@ -18,7 +18,7 @@ namespace ERP.API.Controllers
             _context = context;
         }
 
-        //🟦 ENDPOINT PARA REGISTRO DE USUARIO
+        //🟦 ENDPOINT PARA REGISTRO DE USUARIO ###################################################################
         [HttpPost("registro")]
         public async Task<IActionResult> Registrar([FromBody] Usuario nuevoUsuario)
         {
@@ -78,7 +78,7 @@ namespace ERP.API.Controllers
             }
         }
 
-        //🟦 ENDPOINT PARA LOGIN DE USUARIO
+        //🟦 ENDPOINT PARA LOGIN DE USUARIO #####################################################################
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest login)
         {
@@ -92,12 +92,15 @@ namespace ERP.API.Controllers
             if (usuario == null)
                 return Unauthorized("Usuario no encontrado.");
 
+            if (!usuario.Estado_Cuenta)
+                return Unauthorized("Cuenta no existe o está deshabilitada.");
+
             //Verificar contraseña
             var hasher = new PasswordHasher<Usuario>();
             var resultado = hasher.VerifyHashedPassword(usuario, usuario.Contrasena, login.Contrasena);
 
             if (resultado == PasswordVerificationResult.Failed)
-                return Unauthorized("Correo o contraseña incorrectos.");
+                return Unauthorized("Contraseña incorrecta.");
 
             //Login exitoso
             return Ok(new

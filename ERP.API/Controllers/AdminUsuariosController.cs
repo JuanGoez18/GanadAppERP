@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ERP.API.Models;
 using ERP.API.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace ERP.API.Controllers
 {
@@ -16,6 +17,7 @@ namespace ERP.API.Controllers
             _context = context;
         }
 
+        //optener usuarios
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
@@ -23,14 +25,22 @@ namespace ERP.API.Controllers
             return Ok(usuarios);
         }
 
+        //Crear usurio nuevo
         [HttpPost]
         public async Task<ActionResult<Usuario>> CrearUsuario([FromBody] Usuario usuario)
         {
+            string contrasenaGenerica = "ganadapp";
+
+            // Encripta (hashea) la contraseña
+            var hasher = new PasswordHasher<Usuario>();
+            usuario.Contrasena = hasher.HashPassword(usuario, contrasenaGenerica);
+
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
             return Ok(usuario);
         }
 
+        //Editar usurio
         [HttpPut("{id}")]
         public async Task<IActionResult> EditarUsuario(int id, [FromBody] Usuario usuario)
         {
@@ -38,14 +48,12 @@ namespace ERP.API.Controllers
             if (usuarioExistente == null)
                 return NotFound();
 
-            // Actualiza solo los campos editables
             usuarioExistente.Nombre = usuario.Nombre;
             usuarioExistente.Apellido = usuario.Apellido;
             usuarioExistente.Correo = usuario.Correo;
             usuarioExistente.Rol = usuario.Rol;
             usuarioExistente.Estado_Cuenta = usuario.Estado_Cuenta;
 
-            // 🔒 Solo cambia la contraseña si se envía una nueva
             if (!string.IsNullOrEmpty(usuario.Contrasena))
                 usuarioExistente.Contrasena = usuario.Contrasena;
 
@@ -53,6 +61,8 @@ namespace ERP.API.Controllers
             return NoContent();
         }
 
+        //Eliminar usurio ❗no usar solo borrado logico XD❗
+        /*
         [HttpDelete("{id}")]
         public async Task<IActionResult> EliminarUsuario(int id)
         {
@@ -63,7 +73,7 @@ namespace ERP.API.Controllers
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
             return NoContent();
-        }
+        }*/
 
         [HttpGet("roles")]
         public async Task<ActionResult<IEnumerable<RolDTO>>> GetRoles()
@@ -72,7 +82,7 @@ namespace ERP.API.Controllers
             return Ok(roles);
         }
 
-        //Cambiar el estado de la cuenta
+        //Cambiar el estado de la cuenta (borrado logico)
         [HttpPut("{id}/estado/{nuevoEstado}")]
         public async Task<IActionResult> CambiarEstado(int id, bool nuevoEstado)
         {
