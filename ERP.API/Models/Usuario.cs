@@ -22,7 +22,7 @@ namespace ERP.API.Models
         [Column("correo")]
         public string Correo { get; set; } = string.Empty;
 
-        [Column("contraseña")]
+        [Column("contrasena")]
         public string Contrasena { get; set; } = string.Empty;
 
         [Column("cc")]

@@ -24,14 +24,43 @@
                 <input type="email" id="email" class="form-control" placeholder="ejemplo@correo.com" @bind="correo"/>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3 position-relative">
                 <label for="password" class="form-label">Contraseña</label>
-                <input type="password" id="password" class="form-control" placeholder="********" @bind="contrasena"/>
+                <div class="input-group">
+                    <input type="@((mostrarContrasena ? "text" : "password"))"
+                        id="password"
+                        class="form-control"
+                        placeholder="********"
+                        @bind="contrasena" />
+
+                    <button type="button" class="btn-mostrar-contraseña" @onclick="ToggleVerContrasena">
+                        @if (mostrarContrasena)
+                        {
+                            <!-- Ícono: ojo tachado -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+                                <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+                                <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+                            </svg>
+                        }
+                        else
+                        {
+                            <!-- Ícono: ojo -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                            </svg>
+                        }
+                    </button>
+                </div>
             </div>
 
             <div class="mb-3">
                 <label for="confirm" class="form-label">Confirmar Contraseña</label>
-                <input type="password" id="confirm" class="form-control" placeholder="********" @bind="confirmar"/>
+                <input type="@((mostrarContrasena ? "text" : "password"))"
+                    id="confirm"
+                    class="form-control"
+                    placeholder="********"
+                    @bind="confirmar" />
             </div>
 
             <button @onclick="RegistrarUsuario" class="btn btn-primary w-100">Registrarme</button>
@@ -63,6 +92,7 @@
     private string confirmar = "";
     private string mensaje = "";
     private string toastClass = "";
+    private bool mostrarContrasena = false;
 
     private async Task RegistrarUsuario()
     {
@@ -155,6 +185,11 @@
             MostrarNotificacion("Ups! Error inesperado ", "error");
             Console.Error.WriteLine("Excepción: " + ex.ToString());
         }
+    }
+
+    private void ToggleVerContrasena()
+    {
+        mostrarContrasena = !mostrarContrasena;
     }
 
     private void MostrarNotificacion(string texto, string tipo)

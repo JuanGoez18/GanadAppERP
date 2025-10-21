@@ -18,7 +18,7 @@ namespace ERP.API.Controllers
             _context = context;
         }
 
-        //🟦 ENDPOINT PARA REGISTRO DE USUARIO
+        //🟦 ENDPOINT PARA REGISTRO DE USUARIO ###################################################################
         [HttpPost("registro")]
         public async Task<IActionResult> Registrar([FromBody] Usuario nuevoUsuario)
         {
@@ -78,28 +78,31 @@ namespace ERP.API.Controllers
             }
         }
 
-        //🟦 ENDPOINT PARA LOGIN DE USUARIO
+        //🟦 ENDPOINT PARA LOGIN DE USUARIO #####################################################################
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest login)
         {
             if (string.IsNullOrWhiteSpace(login.Correo) || string.IsNullOrWhiteSpace(login.Contrasena))
                 return BadRequest("Correo y contraseña son obligatorios.");
 
-            // Buscar usuario por correo
+            //Buscar usuario por correo
             var usuario = await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.Correo == login.Correo);
 
             if (usuario == null)
-                return Unauthorized("Correo o contraseña incorrectos.");
+                return Unauthorized("Usuario no encontrado.");
 
-            // Verificar contraseña
+            if (!usuario.Estado_Cuenta)
+                return Unauthorized("Cuenta no existe o está deshabilitada.");
+
+            //Verificar contraseña
             var hasher = new PasswordHasher<Usuario>();
             var resultado = hasher.VerifyHashedPassword(usuario, usuario.Contrasena, login.Contrasena);
 
             if (resultado == PasswordVerificationResult.Failed)
-                return Unauthorized("Correo o contraseña incorrectos.");
+                return Unauthorized("Contraseña incorrecta.");
 
-            // ✅ Login exitoso
+            //Login exitoso
             return Ok(new
             {
                 mensaje = "Inicio de sesión correcto",

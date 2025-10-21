@@ -14,7 +14,7 @@
         {
             <Inicio />
         }
-        else if (seccionActual == "inventario")
+        else if (seccionActual == "usuarios")
         {
             <Inventario />
         }
@@ -26,8 +26,8 @@
             <p>Serás redirigido a la página de inicio...</p>
         </div>
         <!-- Modal centrado -->
-        <div class="modal-overlay">
-            <div class="modal-container">
+        <div class="modal-nosesion">
+            <div class="nosesion-container">
                 <h2>Sesión no activa</h2>
                 <p>Para acceder al panel debes iniciar sesión primero.</p>
                 <button class="btn-modal" @onclick="VolverABienvenida">Volver</button>
