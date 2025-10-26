@@ -28,6 +28,21 @@
                 <ul>
                     <li><NavLink href="/home" Match="NavLinkMatch.All" activeClass="active">Inicio</NavLink></li>
                     <li><NavLink href="/inventario" Match="NavLinkMatch.All" activeClass="active">Inventario</NavLink></li>
+                     <li>
+                    <div class="menu-item" @onclick="ToggleInventario">
+                        <span>Inventario</span>
+                        <i class="fas fa-chevron-down flecha @(mostrarInventario ? "abierta" : "")"></i>
+                    </div>
+
+                    @if (mostrarInventario)
+                    {
+                        <ul class="submenu">
+                            <li><NavLink href="/inventario-medicamentos" activeClass="active">Medicamentos</NavLink></li>
+                            <li><NavLink href="/proveedores" activeClass="active">Proveedores</NavLink></li>
+                            <li><NavLink href="/veterinarios" activeClass="active">Veterinarios</NavLink></li>
+                        </ul>
+                    }
+                </li>
                     <li><NavLink href="/usuarios" Match="NavLinkMatch.All" activeClass="active">Usuarios</NavLink></li>
                 </ul>
             </nav>
@@ -51,4 +66,15 @@
         await SesionService.CerrarSesionAsync();
         Nav.NavigateTo("/", forceLoad: true);
     }
+}
+
+@code {
+    private bool mostrarInventario = false;
+
+    private void ToggleInventario()
+    {
+        mostrarInventario = !mostrarInventario;
+    }
+
+   
 }

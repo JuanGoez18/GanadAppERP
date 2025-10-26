@@ -1,0 +1,285 @@
+@page "/proveedores"
+@layout MainLayout
+@using ERP.Blazor.Models
+@inject ERP.Blazor.Services.ProveedoresService ProveedoresService
+@inject ERP.Blazor.Services.SesionService SesionService
+@inject NavigationManager Nav
+
+<PageTitle>Proveedores</PageTitle>
+
+@if (!sesionVerificada)
+{
+    <div class="modal-nosesion">
+        <div class="nosesion-container">
+            <h2>Sesión no activa</h2>
+            <p>Debes iniciar sesión primero.</p>
+            <button class="btn-modal" @onclick="VolverABienvenida">Volver</button>
+        </div>
+    </div>
+}
+else
+{
+    <div class="auth-container2">
+        <div class="auth-card2">
+            <h1 class="main-title">Gestión de Proveedores</h1>
+            <p class="module-description">Administra los proveedores registrados en el sistema ERP.</p>
+
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar proveedor..." @bind="filtro" />
+                <button class="btn btn-secondary" @onclick="BuscarProveedores">Buscar</button>
+                <button class="btn btn-primary" @onclick="AbrirModalNuevo">+ Nuevo Proveedor</button>
+            </div>
+
+            <table class="usuarios-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Edad</th>
+                        <th>C.C.</th>
+                        <th>Sexo</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Entidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (cargando)
+                    {
+                        <tr><td colspan="10" class="text-center">Cargando proveedores...</td></tr>
+                    }
+                    else if (proveedores == null || proveedores.Count == 0)
+                    {
+                        <tr><td colspan="10" class="text-center">No se encontraron proveedores.</td></tr>
+                    }
+                    else
+                    {
+                        @foreach (var p in proveedores.Where(x => x.Estado))
+                        {
+                            <tr>
+                                <td>@p.IdProveedores</td>
+                                <td>@p.Nombre</td>
+                                <td>@p.Apellido</td>
+                                <td>@p.Edad</td>
+                                <td>@p.CC</td>
+                                <td>@p.Sexo</td>
+                                <td>@p.Direccion</td>
+                                <td>@p.Telefono</td>
+                                <td>@p.Entidad</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info" @onclick="() => EditarProveedor(p)">Editar</button>
+                                    <button class="btn btn-sm btn-danger" @onclick="() => ConfirmEliminar(p.IdProveedores)">Eliminar</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@if (mostrarModal)
+{
+    <div class="modal-nuevousuario-over">
+        <div class="modal-nuevousuario">
+            <h3>@(proveedorEditando == null ? "Nuevo Proveedor" : "Editar Proveedor")</h3>
+
+            @if (!string.IsNullOrEmpty(mensajeError))
+            {
+                <div class="alert alert-danger">@mensajeError</div>
+            }
+
+            <div class="modal-nuevousuario-body">
+                <label>Nombre</label>
+                <input type="text" class="form-control" @bind="form.Nombre" />
+
+                <label>Apellido</label>
+                <input type="text" class="form-control" @bind="form.Apellido" />
+
+                <label>Edad</label>
+                <input type="number" class="form-control" @bind="form.Edad" min="1" />
+
+                <label>C.C.</label>
+                <input type="text" class="form-control" @bind="form.CC" />
+
+                <label>Sexo</label>
+                <input type="text" class="form-control" @bind="form.Sexo" />
+
+                <label>Dirección</label>
+                <input type="text" class="form-control" @bind="form.Direccion" />
+
+                <label>Teléfono</label>
+                <input type="text" class="form-control" @bind="form.Telefono" />
+
+                <label>Entidad</label>
+                <input type="text" class="form-control" @bind="form.Entidad" />
+            </div>
+
+            <div class="modal-nuevousuario-footer">
+                <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
+                <button class="btn btn-success" @onclick="GuardarProveedor">Guardar</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<ProveedorDTO> proveedores = new();
+    private ProveedorDTO form = new ProveedorDTO();
+    private ProveedorDTO? proveedorEditando;
+    private bool mostrarModal = false;
+    private string filtro = string.Empty;
+    private bool sesionVerificada = true;
+    private bool cargando = true;
+    private string mensajeError = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await VerificarSesionAsync();
+        await CargarProveedoresAsync();
+    }
+
+    private async Task VerificarSesionAsync()
+    {
+        try
+        {
+            sesionVerificada = await SesionService.HaySesionAsync();
+        }
+        catch
+        {
+            sesionVerificada = false;
+        }
+    }
+
+    private async Task CargarProveedoresAsync()
+    {
+        try
+        {
+            cargando = true;
+            proveedores = await ProveedoresService.ObtenerProveedoresAsync();
+            proveedores = proveedores.Where(x => x.Estado).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error cargando proveedores: {ex.Message}");
+            proveedores = new List<ProveedorDTO>();
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private async Task BuscarProveedores()
+    {
+        try
+        {
+            cargando = true;
+            if (string.IsNullOrWhiteSpace(filtro))
+                proveedores = await ProveedoresService.ObtenerProveedoresAsync();
+            else
+                proveedores = await ProveedoresService.BuscarProveedoresAsync(filtro);
+
+            proveedores = proveedores.Where(x => x.Estado).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error buscando proveedores: {ex.Message}");
+            proveedores = new List<ProveedorDTO>();
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private void AbrirModalNuevo()
+    {
+        proveedorEditando = null;
+        form = new ProveedorDTO { Estado = true };
+        mostrarModal = true;
+    }
+
+    private void EditarProveedor(ProveedorDTO p)
+    {
+        proveedorEditando = p;
+        form = new ProveedorDTO
+        {
+            IdProveedores = p.IdProveedores,
+            Nombre = p.Nombre,
+            Apellido = p.Apellido,
+            Edad = p.Edad,
+            CC = p.CC,
+            Sexo = p.Sexo,
+            Direccion = p.Direccion,
+            Telefono = p.Telefono,
+            Entidad = p.Entidad,
+            Estado = p.Estado
+        };
+        mostrarModal = true;
+    }
+
+    private async Task GuardarProveedor()
+    {
+        mensajeError = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(form.Nombre) ||
+            string.IsNullOrWhiteSpace(form.Apellido) ||
+            form.Edad <= 0 ||
+            string.IsNullOrWhiteSpace(form.CC) ||
+            string.IsNullOrWhiteSpace(form.Sexo) ||
+            string.IsNullOrWhiteSpace(form.Direccion) || 
+            string.IsNullOrWhiteSpace(form.Telefono) ||
+            string.IsNullOrWhiteSpace(form.Entidad))
+        {
+            mensajeError = "Todos los campos son obligatorios.";
+            return;
+        }
+
+        bool ok;
+        string error;
+
+        if (proveedorEditando == null)
+        {
+            var res = await ProveedoresService.CrearProveedorAsync(form);
+            ok = res.ok;
+            error = res.error;
+        }
+        else
+        {
+            var res = await ProveedoresService.ActualizarProveedorAsync(form);
+            ok = res.ok;
+            error = res.error;
+        }
+
+        if (!ok)
+        {
+            mensajeError = string.IsNullOrWhiteSpace(error) ? "Error al guardar proveedor." : error;
+            return;
+        }
+
+        mostrarModal = false;
+        await CargarProveedoresAsync();
+    }
+
+    private async Task ConfirmEliminar(int id)
+    {
+        mensajeError = string.Empty;
+        var res = await ProveedoresService.CambiarEstadoProveedorAsync(id, false);
+
+        if (!res.ok)
+        {
+            mensajeError = res.error;
+            Console.WriteLine("Error al desactivar proveedor: " + res.error);
+            return;
+        }
+
+        await CargarProveedoresAsync();
+    }
+
+    private void CerrarModal() => mostrarModal = false;
+    private void VolverABienvenida() => Nav.NavigateTo("/", forceLoad: true);
+}

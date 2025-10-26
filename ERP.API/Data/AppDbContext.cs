@@ -9,7 +9,8 @@ namespace ERP.API.Data
 
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<RolDTO> Roles { get; set; }
-
+        public DbSet<Medicamento> Medicamentos { get; set; }
+        public DbSet<Proveedor> Proveedores { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             

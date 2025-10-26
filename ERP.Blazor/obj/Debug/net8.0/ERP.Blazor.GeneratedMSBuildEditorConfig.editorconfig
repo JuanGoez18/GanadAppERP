@@ -13,71 +13,73 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = browser
 build_property.RootNamespace = ERP.Blazor
 build_property.RootNamespace = ERP.Blazor
-build_property.ProjectDir = C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\
+build_property.ProjectDir = C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = false
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor
+build_property.MSBuildProjectDirectory = C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor
 build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/App.razor]
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/Bienvenida.razor]
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Pages/Bienvenida.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQmllbnZlbmlkYS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/Home.razor]
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/HomePages/Inicio.razor]
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Pages/HomePages/Inicio.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZVBhZ2VzXEluaWNpby5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/HomePages/Inventario.razor]
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Pages/HomePages/Inventario.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZVBhZ2VzXEludmVudGFyaW8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/HomePages/Usuarios.razor]
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Pages/HomePages/InventarioMedicamentos.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZVBhZ2VzXEludmVudGFyaW9NZWRpY2FtZW50b3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Pages/HomePages/Proveedores.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZVBhZ2VzXFByb3ZlZWRvcmVzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Pages/HomePages/Usuarios.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZVBhZ2VzXFVzdWFyaW9zLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/Login.razor]
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Pages/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/Medicamentos.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWVkaWNhbWVudG9zLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/Productos.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdG9zLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Pages/Registro.razor]
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Pages/Registro.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0cm8ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Shared/EmptyLayout.razor]
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Shared/EmptyLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEVtcHR5TGF5b3V0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Shared/MainLayout.razor]
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/_Imports.razor]
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Layout/MainLayout.razor]
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-8bs4cqhs6m
 
-[C:/Users/ADMIN/Documents/GitHub/GanadAppERP/ERP.Blazor/Layout/NavMenu.razor]
+[C:/Users/iberl/OneDrive/Documentos/GitHub/GanadAppERP/ERP.Blazor/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-x3q4584qjw
