@@ -2067,6 +2067,7 @@ C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.
 C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.0\refint\ERP.Blazor.dll
 C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.0\ERP.Blazor.pdb
 C:\Users\iberl\OneDrive\Documentos\GitHub\GanadAppERP\ERP.Blazor\obj\Debug\net8.0\ref\ERP.Blazor.dll
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\blazor.boot.json
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\blazor.webassembly.js
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.js
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.js.map
@@ -2074,6 +2075,8 @@ C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.native.wasm
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.runtime.8.0.19.uy6g7bf3nh.js
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.runtime.js.map
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\ERP.Blazor.pdb
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\ERP.Blazor.wasm
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\icudt_CJK.dat
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\icudt_EFIGS.dat
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\icudt_no_CJK.dat
@@ -2268,19 +2271,6 @@ C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Xml.XPath.wasm
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Xml.XPath.XDocument.wasm
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\WindowsBase.wasm
-C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.js.gz
-C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.js.map.gz
-C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.native.8.0.19.6i15506dkg.js.gz
-C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.native.wasm.gz
-C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\icudt_no_CJK.dat.gz
-C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\blazor.webassembly.js.gz
-C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\icudt_CJK.dat.gz
-C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.runtime.js.map.gz
-C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\icudt_EFIGS.dat.gz
-C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.runtime.8.0.19.uy6g7bf3nh.js.gz
-C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\blazor.boot.json
-C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\ERP.Blazor.pdb
-C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\ERP.Blazor.wasm
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Data.DataSetExtensions.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Diagnostics.DiagnosticSource.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Net.wasm.gz
@@ -2303,6 +2293,8 @@ C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.ComponentModel.TypeConverter.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\ERP.Blazor.pdb.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Text.Encodings.Web.wasm.gz
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.js.gz
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.js.map.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Runtime.Handles.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\netstandard.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Security.Principal.Windows.wasm.gz
@@ -2315,6 +2307,7 @@ C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Xml.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.Components.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Xml.XPath.wasm.gz
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.native.8.0.19.6i15506dkg.js.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Net.Mail.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Reflection.Metadata.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Console.wasm.gz
@@ -2323,6 +2316,7 @@ C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Runtime.Loader.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Threading.Thread.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Xml.Linq.wasm.gz
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.native.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Windows.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Threading.Tasks.Parallel.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Web.wasm.gz
@@ -2332,6 +2326,7 @@ C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Drawing.Primitives.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Transactions.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Threading.wasm.gz
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\icudt_no_CJK.dat.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.IO.Compression.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Private.Uri.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\WindowsBase.wasm.gz
@@ -2341,6 +2336,7 @@ C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Security.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Reflection.Emit.ILGeneration.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Text.Encoding.Extensions.wasm.gz
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\blazor.webassembly.js.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Collections.Concurrent.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Net.WebProxy.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Security.Cryptography.X509Certificates.wasm.gz
@@ -2352,6 +2348,7 @@ C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Net.Quic.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\mscorlib.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Transactions.Local.wasm.gz
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\icudt_CJK.dat.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Xml.Serialization.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Runtime.Serialization.Xml.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Runtime.InteropServices.wasm.gz
@@ -2402,6 +2399,7 @@ C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.Authorization.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Net.NetworkInformation.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.IO.FileSystem.Watcher.wasm.gz
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.runtime.js.map.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Reflection.Extensions.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Xml.XDocument.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.IO.FileSystem.DriveInfo.wasm.gz
@@ -2417,6 +2415,7 @@ C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.ObjectModel.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Xml.XmlDocument.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Reflection.Emit.wasm.gz
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\icudt_EFIGS.dat.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Resources.ResourceManager.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Net.WebSockets.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.Options.wasm.gz
@@ -2447,6 +2446,7 @@ C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Security.Cryptography.Encoding.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Reflection.DispatchProxy.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.IO.MemoryMappedFiles.wasm.gz
+C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\dotnet.runtime.8.0.19.uy6g7bf3nh.js.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Runtime.Extensions.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\ERP.Blazor.wasm.gz
 C:\Users\ADMIN\Documents\GitHub\GanadAppERP\ERP.Blazor\bin\Debug\net8.0\wwwroot\_framework\System.Web.HttpUtility.wasm.gz

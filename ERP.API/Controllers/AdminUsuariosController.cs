@@ -25,6 +25,18 @@ namespace ERP.API.Controllers
             return Ok(usuarios);
         }
 
+        // ✅ Obtener un usuario por ID
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Usuario>> GetUsuarioPorId(int id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+
+            if (usuario == null)
+                return NotFound(new { mensaje = "Usuario no encontrado." });
+
+            return Ok(usuario);
+        }
+
         //Crear usurio nuevo
         [HttpPost]
         public async Task<ActionResult<Usuario>> CrearUsuario([FromBody] Usuario usuario)
@@ -44,22 +56,49 @@ namespace ERP.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> EditarUsuario(int id, [FromBody] Usuario usuario)
         {
+            if (usuario == null)
+                return BadRequest("Cuerpo vacío.");
+
+            if (id != usuario.Id_Usuarios && usuario.Id_Usuarios != 0)
+                return BadRequest("El ID de la URL no coincide con el ID del cuerpo.");
+
             var usuarioExistente = await _context.Usuarios.FindAsync(id);
             if (usuarioExistente == null)
-                return NotFound();
+                return NotFound(new { mensaje = "Usuario no encontrado." });
 
-            usuarioExistente.Nombre = usuario.Nombre;
-            usuarioExistente.Apellido = usuario.Apellido;
-            usuarioExistente.Correo = usuario.Correo;
-            usuarioExistente.Rol = usuario.Rol;
-            usuarioExistente.Estado_Cuenta = usuario.Estado_Cuenta;
+            // Actualiza solo campos permitidos
+            usuarioExistente.Nombre = usuario.Nombre ?? usuarioExistente.Nombre;
+            usuarioExistente.Apellido = usuario.Apellido ?? usuarioExistente.Apellido;
+            usuarioExistente.Correo = usuario.Correo ?? usuarioExistente.Correo;
+            usuarioExistente.CC = usuario.CC ?? usuarioExistente.CC;
+            usuarioExistente.Edad = usuario.Edad != 0 ? usuario.Edad : usuarioExistente.Edad;
+            usuarioExistente.Estado_Civil = usuario.Estado_Civil ?? usuarioExistente.Estado_Civil;
+            usuarioExistente.Sexo = usuario.Sexo ?? usuarioExistente.Sexo;
+            usuarioExistente.Rol = usuario.Rol != 0 ? usuario.Rol : usuarioExistente.Rol;
 
-            if (!string.IsNullOrEmpty(usuario.Contrasena))
-                usuarioExistente.Contrasena = usuario.Contrasena;
+            // Si vienen una nueva contraseña, hashearla (no aceptar cadena vacía)
+            if (!string.IsNullOrWhiteSpace(usuario.Contrasena))
+            {
+                var hasher = new PasswordHasher<Usuario>();
+                usuarioExistente.Contrasena = hasher.HashPassword(usuarioExistente, usuario.Contrasena);
+            }
 
-            await _context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (DbUpdateException dbEx)
+            {
+                // Dev: retornar mensaje para depuración. En producción cambia por mensaje genérico.
+                return StatusCode(500, new { mensaje = "Error al actualizar usuario (DB).", detalle = dbEx.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensaje = "Error inesperado al actualizar usuario.", detalle = ex.Message });
+            }
         }
+
 
         //Eliminar usurio ❗no usar solo borrado logico XD❗
         /*

@@ -16,8 +16,33 @@ namespace ERP.Blazor.Services
         // Guarda datos de sesión en localStorage
         public async Task GuardarSesionAsync(object datos)
         {
-            string json = JsonSerializer.Serialize(datos);
-            await _js.InvokeVoidAsync("localStorage.setItem", "usuarioSesion", json);
+            try
+            {
+                string json = JsonSerializer.Serialize(datos);
+                using var doc = JsonDocument.Parse(json);
+
+                // Si existe el campo "usuario", guardamos solo eso
+                if (doc.RootElement.TryGetProperty("usuario", out var usuario))
+                {
+                    string usuarioJson = usuario.GetRawText();
+                    await _js.InvokeVoidAsync("localStorage.setItem", "usuarioSesion", usuarioJson);
+                }
+                else
+                {
+                    // Si no, guarda todo
+                    await _js.InvokeVoidAsync("localStorage.setItem", "usuarioSesion", json);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error guardando sesión: {ex.Message}");
+            }
+        }
+
+        // Guarda directamente un JSON de usuario sin procesar
+        public async Task GuardarSesionRawAsync(string usuarioJson)
+        {
+            await _js.InvokeVoidAsync("localStorage.setItem", "usuarioSesion", usuarioJson);
         }
 
         // Obtiene los datos de sesión
@@ -27,7 +52,10 @@ namespace ERP.Blazor.Services
             if (string.IsNullOrEmpty(json))
                 return default;
 
-            return JsonSerializer.Deserialize<T>(json);
+            return JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
         }
 
         // Elimina la sesión
