@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\iberl\\OneDrive\\Documentos\\GitHub\\GanadAppERP\\ERP.Blazor\\ERP.Blazor.csproj": {}
+    "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\ERP.Blazor.csproj": {}
   },
   "projects": {
-    "C:\\Users\\iberl\\OneDrive\\Documentos\\GitHub\\GanadAppERP\\ERP.Blazor\\ERP.Blazor.csproj": {
+    "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\ERP.Blazor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\iberl\\OneDrive\\Documentos\\GitHub\\GanadAppERP\\ERP.Blazor\\ERP.Blazor.csproj",
+        "projectUniqueName": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\ERP.Blazor.csproj",
         "projectName": "ERP.Blazor",
-        "projectPath": "C:\\Users\\iberl\\OneDrive\\Documentos\\GitHub\\GanadAppERP\\ERP.Blazor\\ERP.Blazor.csproj",
-        "packagesPath": "C:\\Users\\iberl\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\iberl\\OneDrive\\Documentos\\GitHub\\GanadAppERP\\ERP.Blazor\\obj\\",
+        "projectPath": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\ERP.Blazor.csproj",
+        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\iberl\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -37,8 +37,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -62,7 +61,7 @@
             "Microsoft.NET.Sdk.WebAssembly.Pack": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.8, )",
+              "version": "[8.0.19, )",
               "autoReferenced": true
             }
           },
@@ -88,7 +87,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
