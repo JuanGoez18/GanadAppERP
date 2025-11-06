@@ -23,7 +23,7 @@ namespace ERP.Blazor.Models
         public string Sexo { get; set; } = string.Empty;
 
         [JsonPropertyName("telefono")]
-        public string Telefono { get; set; } = string.Empty;
+        public string Telefono { get; set; }
 
         [JsonPropertyName("entidad")]
         public string Entidad { get; set; } = string.Empty;

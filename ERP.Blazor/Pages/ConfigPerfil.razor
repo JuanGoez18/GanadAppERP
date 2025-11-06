@@ -159,6 +159,7 @@
     {
         mensaje = texto;
         toastClass = tipo;
+        StateHasChanged();
         InvokeAsync(async () =>
         {
             await Task.Delay(2000);

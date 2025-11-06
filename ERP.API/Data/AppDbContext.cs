@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ERP.API.Models;
+using TuProyecto.Modelos;
 
 namespace ERP.API.Data
 {
@@ -11,6 +12,12 @@ namespace ERP.API.Data
         public DbSet<RolDTO> Roles { get; set; }
         public DbSet<Medicamento> Medicamentos { get; set; }
         public DbSet<Proveedor> Proveedores { get; set; }
+
+        public DbSet<Ganado> Ganado { get; set; }
+
+        public DbSet<Veterinario> Veterinarios { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             

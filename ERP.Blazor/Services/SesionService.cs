@@ -1,6 +1,7 @@
 using Microsoft.JSInterop;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ERP.Blazor.Models;
 
 namespace ERP.Blazor.Services
 {
@@ -21,7 +22,6 @@ namespace ERP.Blazor.Services
                 string json = JsonSerializer.Serialize(datos);
                 using var doc = JsonDocument.Parse(json);
 
-                // Si existe el campo "usuario", guardamos solo eso
                 if (doc.RootElement.TryGetProperty("usuario", out var usuario))
                 {
                     string usuarioJson = usuario.GetRawText();
@@ -29,7 +29,6 @@ namespace ERP.Blazor.Services
                 }
                 else
                 {
-                    // Si no, guarda todo
                     await _js.InvokeVoidAsync("localStorage.setItem", "usuarioSesion", json);
                 }
             }
@@ -58,17 +57,39 @@ namespace ERP.Blazor.Services
             });
         }
 
-        // Elimina la sesión
-        public async Task CerrarSesionAsync()
-        {
-            await _js.InvokeVoidAsync("localStorage.removeItem", "usuarioSesion");
-        }
-
         // Verifica si hay sesión activa
         public async Task<bool> HaySesionAsync()
         {
             var json = await _js.InvokeAsync<string>("localStorage.getItem", "usuarioSesion");
             return !string.IsNullOrEmpty(json);
+        }
+
+        // Cierra la sesión
+        public async Task CerrarSesionAsync()
+        {
+            await _js.InvokeVoidAsync("localStorage.removeItem", "usuarioSesion");
+        }
+
+        // ✅ Nuevo: Obtener el rol del usuario autenticado
+        public async Task<string> ObtenerRolUsuarioAsync()
+        {
+            var usuario = await ObtenerSesionAsync<UsuarioDTO>();
+            return usuario?.RolNombre ?? string.Empty;
+        }
+
+        // ✅ Nuevo: Obtener el ID del usuario autenticado
+        public async Task<int> ObtenerIdUsuarioAsync()
+        {
+            var usuario = await ObtenerSesionAsync<UsuarioDTO>();
+            return usuario?.Id_Usuarios ?? 0;
+        }
+
+        // ✅ Opcional: Obtener nombre completo del usuario
+        public async Task<string> ObtenerNombreCompletoAsync()
+        {
+            var usuario = await ObtenerSesionAsync<UsuarioDTO>();
+            if (usuario == null) return string.Empty;
+            return $"{usuario.Nombre} {usuario.Apellido}".Trim();
         }
     }
 }
