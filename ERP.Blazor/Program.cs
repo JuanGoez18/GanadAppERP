@@ -15,6 +15,14 @@ builder.Services.AddScoped<AdminUsuarioService>();
 builder.Services.AddScoped<RolService>();
 builder.Services.AddScoped<MedicamentosService>();
 builder.Services.AddScoped<ProveedoresService>();
+builder.Services.AddScoped<GanadoService>();
+builder.Services.AddScoped<VeterinariosService>();
+
+
+
+
+
+
 
 
 
