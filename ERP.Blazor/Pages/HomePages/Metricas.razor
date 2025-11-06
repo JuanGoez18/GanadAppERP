@@ -1,19 +1,86 @@
 @page "/metricas"
-<PageTitle>Metricas</PageTitle>
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+<PageTitle>Métricas</PageTitle>
 
 <div class="auth-container2">
     <div class="auth-card2">
-        <h1 class="main-titles">Metricas GanadApp</h1>
-        <p class="main-descriptions">Aquí se mostrarán solos resumenes y reportes generdos.</p>
+        <h1 class="main-titles">Métricas GanadApp</h1>
+        <p class="main-descriptions">Visualiza aquí los indicadores clave del sistema.</p>
 
+        <!-- Tarjetas de resumen -->
         <div class="dashboard-cards">
             <div class="card">
-            <h3>Inventario</h3>
-            <p>Gestión de productos, stock y categorías.</p>
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users">
+                        <path d="M16 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M7 21v-2a4 4 0 0 1 3-3.87" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                </div>
+                <div class="card-info">
+                    <h3>Usuarios activos</h3>
+                    <p>@usuariosActivos</p>
+                    <span class="porcentaje positivo">+@usuariosPorcentaje% vs mes anterior</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package">
+                        <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path>
+                    </svg>
+                </div>
+                <div class="card-info">
+                    <h3>Inventario disponible</h3>
+                    <p>@inventarioTotal ítems</p>
+                    <span class="porcentaje negativo">@inventarioPorcentaje% vs mes anterior</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign">
+                        <line x1="12" y1="1" x2="12" y2="23" />
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H15a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                </div>
+                <div class="card-info">
+                    <h3>Ingresos mensuales</h3>
+                    <p>$@ingresosTotales</p>
+                    <span class="porcentaje positivo">+@ingresosPorcentaje% crecimiento</span>
+                </div>
             </div>
         </div>
+
+        <!-- Gráfica -->
+        <div class="grafica-section">
+            <h2>Evolución de usuarios por mes</h2>
+            <canvas id="graficoUsuarios"></canvas>
+        </div>
     </div>
+
     <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
         <path d="M0,160 C480,240 960,80 1440,160 L1440,320 L0,320 Z"></path>
     </svg>
 </div>
+
+@code {
+    private int usuariosActivos = 134;
+    private int usuariosPorcentaje = 8;
+
+    private int inventarioTotal = 892;
+    private int inventarioPorcentaje = -3;
+
+    private decimal ingresosTotales = 1745000;
+    private int ingresosPorcentaje = 12;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("crearGraficoUsuarios");
+        }
+    }
+}
