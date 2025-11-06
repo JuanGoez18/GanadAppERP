@@ -124,6 +124,8 @@ code {
     --naranja-oscuro: #e06900;
     --naranja-bibrant: #FF8C00;
     --blanco: #ffffff;
+    --maintitle: #363636;
+    --maindescription: #565656;
     --gris: #f5f5f5;
     --gris2: #c4c4c4;
     --gris3: #858585;
@@ -661,6 +663,56 @@ code {
     transform: scale(1.05);
 }
 
+/* BOTÓN DE MENÚ MÓVIL */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+
+.menu-movil {
+    position: fixed;
+    top: 5rem;
+    right: 0;
+    width: 60%;
+    background: var(--naranja-bibrant);
+    box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    z-index: 20;
+    border-radius: 0 0 0 15px;
+    animation: slideIn 0.3s ease;
+}
+
+.menu-movil a {
+    color: var(--blanco);
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0.8rem 0;
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.menu-movil a:last-child {
+    border-bottom: none;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
 /*Layout Principal Vistas Home*/
 .layout {
     display: flex;
@@ -682,6 +734,7 @@ code {
     flex-shrink: 0;
     overflow-y: auto;
     user-select: none;
+    transition: left 0.3s ease;
 }
 
 .sidebar nav ul {
@@ -726,6 +779,7 @@ code {
     padding-left: 1rem;
     background-color: var(--dark);
     border-radius: 0 0 10px 10px;
+    padding-bottom: 0.1rem;
 }
 
 .submenu li a {
@@ -767,6 +821,33 @@ code {
 .sidebar nav ul li a:hover,
 .sidebar nav ul li a.active {
     background: var(--dark);
+}
+
+/* ===== BOTÓN HAMBURGUESA PARA SIDEBAR ===== */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 5.5rem; /* justo debajo del header */
+    left: 1rem;
+    background: var(--naranja-bibrant);
+    border: none;
+    color: white;
+    border-radius: 10px;
+    padding: 0.5rem;
+    cursor: pointer;
+    z-index: 15;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== OVERLAY CUANDO SE ABRE EL MENÚ ===== */
+.sidebar-overlay {
+    position: fixed;
+    top: 5rem;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 9;
 }
 
 
@@ -827,29 +908,56 @@ code {
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-    .layout {
-        flex-direction: column;
+    .sidebar {
+        position: fixed;
+        top: 5rem;
+        left: -100%;
+        height: calc(100% - 5rem);
+        width: 220px;
+        background: var(--nav);
+        color: var(--blanco);
+        transition: left 0.3s ease;
+        z-index: 10;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.3);
     }
 
-    .sidebar {
+    /* Mostrar el sidebar cuando está activo */
+    .sidebar[style*="left: 0"] {
+        left: 0;
+    }
+
+    .sidebar-toggle {
+        display: block;
+    }
+
+    .layout {
+        flex-direction: column;
+        padding-top: 5rem;
+    }
+
+    .main-content {
         width: 100%;
-        min-height: 0;
-        flex-direction: row;
-        overflow-x: auto;
         height: auto;
     }
 
-    .sidebar nav ul {
-        display: flex;
+    .top-nav {
+        display: none;
     }
 
-    .sidebar nav ul li {
-        margin-bottom: 0;
-        flex: 1;
+    .menu-toggle {
+        display: block;
     }
 
-    .sidebar nav ul li a {
-        text-align: center;
+    .main-header {
+        padding: 0.8rem 1rem;
+    }
+
+    .main-header .logo {
+        font-size: 1.3rem;
+    }
+
+    .menu-item {
+        font-size: 12px;
     }
 }
 
@@ -954,8 +1062,8 @@ code {
 /* tamaño de grafica */
 .grafica-section canvas {
     width: 100%;
-    max-width: 600px; /* 👈 ajusta aquí el ancho máximo */
-    height: 300px;    /* 👈 o puedes cambiarlo a 300px / 500px según necesites */
+    max-width: 800px; /* 👈 ajusta aquí el ancho máximo */
+    max-height: 280px;    /* 👈 o puedes cambiarlo a 300px / 500px según necesites */
     margin: 0 auto;
     display: block;
 }
@@ -985,13 +1093,13 @@ code {
 .auth-card2 .main-titles {
     font-size: 40px;
     font-weight: 900;
-    color: var(--nav);
+    color: var(--maintitle);
     font-family: var(--font-title);
 }
 
 .auth-card2 .main-descriptions {
     font-size: 17px;
-    color: var(--gris3);
+    color: var(--maindescription);
 }
 
 /* VISTAS PAGINAS DASHBOARD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -1078,7 +1186,7 @@ code {
 }
 
 
-/* 🟢 ESTADOS */
+/* ESTADOS */
 .estado {
     padding: 0.3rem 0.6rem;
     border-radius: 6px;
@@ -1095,75 +1203,12 @@ code {
     color: var(--dark);
 }
 
-/* MODAL NUEVO USUARIO 🔽*/
-.modal-nuevousuario-over {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+select.form-control {
+    appearance: auto;
+    -webkit-appearance: auto;
+    -moz-appearance: auto;
+    background-image: none;
 }
-
-.modal-nuevousuario {
-    background-color: var(--dark);
-    padding: 3rem 6rem 0 6rem;
-    border-radius: 10px;
-    width: 480px;
-    height: 500px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.6);
-}
-
-.modal-nuevousuario h3 {
-    margin-bottom: 1rem;
-    color: var(--naranja);
-    text-align: center;
-}
-
-.modal-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-    margin-bottom: 1.2rem;
-}
-
-.modal-nuevousuario-body label {
-    font-size: 0.9rem;
-}
-
-.modal-nuevousuario-body input,
-.modal-nuevousuario-body select {
-    padding: 0.5rem;
-    border: 1px solid var(--gris3);
-    border-radius: 6px;
-    background-color: var(--dark);
-    color: var(--blanco);
-    outline: none;
-    margin-bottom: 1rem;
-}
-
-.modal-nuevousuario-body input:focus,
-.modal-nuevousuario-body select:focus {
-    border-color: var(--naranja);
-}
-
-.modal-nuevousuario label,
-.modal-nuevousuario input,
-.modal-nuevousuario select {
-    color: var(--gris);
-}
-
-.modal-nuevousuario-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-}
-/* MODAL NUEVO USUARIO 🔼*/
-
-
-/* 📋 TABLA DE medicamentos */
-
 
 /* 📱 RESPONSIVE */
 @media (max-width: 768px) {
@@ -1247,21 +1292,29 @@ code {
 }
 
 
-/*########################################################################################################################*/
-/* inventario medeicamnetos  */
-/* dieseño stock  */
+/* VISTAS PAGINAS DASHBOARD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* VISTA MEDICAMENTO  */
 
-.stock-verde {
-    color: #00c851;
-    font-weight: bold;
+.stock {
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-weight: 600;
 }
-.stock-amarillo {
-    color: #ffbb33;
+
+.stock.verde {
+    background-color: #00c851;
     font-weight: bold;
+    color: var(--blanco);
 }
-.stock-rojo {
-    color: #ff4444;
+.stock.amarillo {
+    background-color: #ffbb33;
     font-weight: bold;
+    color: var(--blanco);
+}
+.stock.rojo {
+    background-color: #ff4444;
+    font-weight: bold;
+    color: var(--blanco);
 }
 
 .text-danger {
@@ -1296,8 +1349,6 @@ code {
 .arrow.rotate {
     transform: rotate(180deg);
 }
-
-
 
 
 /* VISTAS PAGINAS DASHBOARD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -1506,4 +1557,72 @@ code {
     z-index: 2;
     padding: 1rem;
     }
+}
+
+
+/* VISTAS PAGINAS DASHBOARD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* ESTILOS GENERICOS O REUTILIZABLES */
+
+.modal-generico-over {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-generico {
+    background-color: var(--dark);
+    padding: 3rem 6rem 4rem 6rem;
+    border-radius: 10px;
+    width: 480px;
+    height: auto;
+    box-shadow: 0 0 15px rgba(0,0,0,0.6);
+}
+
+.modal-generico-body label {
+    font-size: 0.9rem;
+}
+
+.modal-generico h3 {
+    margin-bottom: 1rem;
+    color: var(--naranja);
+    text-align: center;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-bottom: 1.2rem;
+}
+
+.modal-generico-body input,
+.modal-generico-body select {
+    padding: 0.5rem;
+    border: 1px solid var(--gris3);
+    border-radius: 6px;
+    background-color: var(--dark);
+    color: var(--blanco);
+    outline: none;
+    margin-bottom: 1rem;
+}
+
+.modal-generico-body input:focus,
+.modal-generico-body select:focus {
+    border-color: var(--naranja);
+}
+
+.modal-generico-body label,
+.modal-generico-body input,
+.modal-generico-body select {
+    color: var(--gris);
+}
+
+.modal-generico-footer {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
 }

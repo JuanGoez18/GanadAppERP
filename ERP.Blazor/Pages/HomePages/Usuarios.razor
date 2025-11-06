@@ -93,22 +93,22 @@
 <!-- Modal de creación/edición (provisional) -->
 @if (mostrarModal)
 {
-    <div class="modal-nuevousuario-over">
-        <div class="modal-nuevousuario">
+    <div class="modal-generico-over">
+        <div class="modal-generico">
             <h3>@(usuarioEditando == null ? "Nuevo Usuario" : "Editar Usuario")</h3>
 
-            <div class="modal-nuevousuario-body">
+            <div class="modal-generico-body">
                 <label>Nombre</label>
-                <input type="text" @bind="form.Nombre" />
+                <input type="text" class="form-control" @bind="form.Nombre" />
 
                 <label>Apellido</label>
-                <input type="text" @bind="form.Apellido" />
+                <input type="text" class="form-control" @bind="form.Apellido" />
 
                 <label>Correo</label>
-                <input type="email" @bind="form.Correo" />
+                <input type="email" class="form-control" @bind="form.Correo" />
 
-                <label>Rol</label>
-                <select @bind="form.Rol">
+                <label >Rol</label>
+                <select @bind="form.Rol" class="selectrol form-control">
                     <option value="">Seleccione un rol</option>
                     @foreach (var r in roles)
                     {
@@ -117,7 +117,7 @@
                 </select>
             </div>
 
-            <div class="modal-nuevousuario-footer">
+            <div class="modal-generico-footer">
                 <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
                 <button class="btn btn-success" @onclick="GuardarUsuario">Guardar</button>
             </div>

@@ -21,8 +21,8 @@ else
 {
     <div class="auth-container2">
         <div class="auth-card2">
-            <h1 class="main-title">Gestión de Veterinarios</h1>
-            <p class="module-description">Administra los veterinarios registrados en el sistema ERP.</p>
+            <h1 class="main-titles">Gestión de Veterinarios</h1>
+            <p class="main-descriptions">Administra los veterinarios registrados en el sistema ERP.</p>
 
             <div class="search-bar">
                 <input type="text" placeholder="Buscar veterinario..." @bind="filtro" />
@@ -83,8 +83,8 @@ else
 
 @if (mostrarModal)
 {
-    <div class="modal-nuevousuario-over">
-        <div class="modal-nuevousuario">
+    <div class="modal-generico-over">
+        <div class="modal-generico">
             <h3>@(veterinarioEditando == null ? "Nuevo Veterinario" : "Editar Veterinario")</h3>
 
             @if (!string.IsNullOrEmpty(mensajeError))
@@ -92,7 +92,7 @@ else
                 <div class="alert alert-danger">@mensajeError</div>
             }
 
-            <div class="modal-nuevousuario-body">
+            <div class="modal-generico-body">
                 <label>Nombre</label>
                 <input type="text" class="form-control" @bind="form.Nombre" />
 
@@ -118,7 +118,7 @@ else
                 <input type="text" class="form-control" @bind="form.Entidad" />
             </div>
 
-            <div class="modal-nuevousuario-footer">
+            <div class="modal-generico-footer">
                 <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
                 <button class="btn btn-success" @onclick="GuardarVeterinario">Guardar</button>
             </div>

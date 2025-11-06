@@ -21,8 +21,8 @@ else
 {
     <div class="auth-container2">
         <div class="auth-card2">
-            <h1 class="main-title">Inventario de Medicamentos</h1>
-            <p class="module-description">Administra los medicamentos registrados en el sistema ERP.</p>
+            <h1 class="main-titles">Inventario de Medicamentos</h1>
+            <p class="main-descriptions">Administra los medicamentos registrados en el sistema ERP.</p>
 
             <div class="search-bar">
                 <input type="text" placeholder="Buscar medicamento..." @bind="filtro" />
@@ -62,7 +62,7 @@ else
                                 <td>@m.FechaRegistro.ToString("yyyy-MM-dd")</td>
                                 <td>@m.FechaCaducidad.ToString("yyyy-MM-dd")</td>
                                 <td>
-                                    <span class="@(GetStockColor(m.Stock))">@m.Stock</span>
+                                    <span class="@($"stock {GetStockColor(m.Stock)}")">@m.Stock</span>
                                 </td>
                                 <td>
                                     <button class="btn btn-sm btn-info" @onclick="() => EditarMedicamento(m)">Editar</button>
@@ -79,11 +79,11 @@ else
 
 @if (mostrarModal)
 {
-    <div class="modal-nuevousuario-over">
-        <div class="modal-nuevousuario">
+    <div class="modal-generico-over">
+        <div class="modal-generico">
             <h3>@(medicamentoEditando == null ? "Nuevo Medicamento" : "Editar Medicamento")</h3>
 
-            <div class="modal-nuevousuario-body">
+            <div class="modal-generico-body">
                 <label>Nombre</label>
                 <input type="text" class="form-control" @bind="form.Nombre" />
                  @if (string.IsNullOrWhiteSpace(form.Nombre))
@@ -116,7 +116,7 @@ else
                 
             </div>
 
-            <div class="modal-nuevousuario-footer">
+            <div class="modal-generico-footer">
                 <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
                 <button class="btn btn-success" @onclick="GuardarMedicamento">Guardar</button>
             </div>
@@ -278,9 +278,9 @@ else
 
     private string GetStockColor(int stock)
     {
-        if (stock == 0) return "stock-rojo";
-        if (stock < 10) return "stock-amarillo";
-        return "stock-verde";
+        if (stock < 4) return "rojo";
+        if (stock < 10) return "amarillo";
+        return "verde";
     }
 
     private void CerrarModal() => mostrarModal = false;

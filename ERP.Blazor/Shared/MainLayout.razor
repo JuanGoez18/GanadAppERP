@@ -7,6 +7,23 @@
     <!-- Header -->
     <header class="main-header">
         <div class="logo">GanadApp ERP <span>System</span></div>
+        <!-- BOTÓN MENÚ MÓVIL -->
+        <button class="menu-toggle" @onclick="ToggleMenu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="25" fill="white" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M1.5 12a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13zm0-4a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13zm0-4a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13z" />
+            </svg>
+        </button>
+
+        @if (mostrarMenuMovil)
+        {
+            <div class="menu-movil">
+                <a href="/">Inicio</a>
+                <a href="/configperfil">Perfil</a>
+                <a href="#">Notificaciones</a>
+                <a @onclick="()=> mostrarModalclosesesion = true">Cerrar sesión</a>
+            </div>
+        }
         <nav class="top-nav">
         <!-- BOTON TOPNAV IR A BIENVENIDA -->
         <a href="/" class="btn-header btn-outline logohouse" id="logohouse"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-file-fill" viewBox="0 0 16 16">
@@ -44,39 +61,51 @@
 
     <!-- Layout -->
     <div class="layout">
-        <aside class="sidebar">
-            <nav>
-                <ul>
-                    <li><NavLink href="/home" Match="NavLinkMatch.All" activeClass="active">Inicio</NavLink></li>
-                    <li><NavLink href="/metricas" Match="NavLinkMatch.All" activeClass="active">Metricas</NavLink></li>
-                     <li>
-                    <div class="menu-item @(menuInventarioActivo ? "active" : "")" @onclick="ToggleInventario">
-                        <span>Inventario</span>
-                        <i class="fas fa-chevron-down flecha @(mostrarInventario ? "abierta" : "")"></i>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="25" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                        </svg>
-                    </div>
+    <!-- BOTÓN BARRA MÓVIL -->
+    <button class="sidebar-toggle" @onclick="ToggleSidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="25" fill="white" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                d="M1.5 12a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13zm0-4a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13zm0-4a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1h-13z" />
+        </svg>
+    </button>
 
-                    @if (mostrarInventario)
-                    {
-                        <ul class="submenu">
-                            <li><NavLink href="/inventario-medicamentos" activeClass="active">Medicamentos</NavLink></li>
-                            <li><NavLink href="/proveedores" activeClass="active">Proveedores</NavLink></li>
-                            <li><NavLink href="/Ganado" activeClass="active">Ganado</NavLink></li>
-                            <li><NavLink href="/veterinarios" activeClass="active">Veterinarios</NavLink></li>
-                        </ul>
-                    }
-                </li>
-                    <li><NavLink href="/usuarios" Match="NavLinkMatch.All" activeClass="active">Usuarios</NavLink></li>
-                </ul>
-            </nav>
-        </aside>
+    @if (mostrarSidebarMovil)
+    {
+        <div class="sidebar-overlay" @onclick="ToggleSidebar"></div>
+    }
+    <aside class="sidebar" style="@(mostrarSidebarMovil ? "left: 0;" : "left: -100%;")">
+        <nav>
+            <ul>
+                <li><NavLink href="/home" Match="NavLinkMatch.All" activeClass="active">Inicio</NavLink></li>
+                <li><NavLink href="/metricas" Match="NavLinkMatch.All" activeClass="active">Metricas</NavLink></li>
+                    <li>
+                <div class="menu-item @(menuInventarioActivo ? "active" : "")" @onclick="ToggleInventario">
+                    <span>Inventario</span>
+                    <i class="fas fa-chevron-down flecha @(mostrarInventario ? "abierta" : "")"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="25" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                        <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                    </svg>
+                </div>
 
-        <main class="main-content">
-            @Body
-        </main>
-    </div>
+                @if (mostrarInventario)
+                {
+                    <ul class="submenu">
+                        <li><NavLink href="/inventario-medicamentos" activeClass="active">Medicamentos</NavLink></li>
+                        <li><NavLink href="/proveedores" activeClass="active">Proveedores</NavLink></li>
+                        <li><NavLink href="/Ganado" activeClass="active">Ganado</NavLink></li>
+                        <li><NavLink href="/veterinarios" activeClass="active">Veterinarios</NavLink></li>
+                    </ul>
+                }
+            </li>
+                <li><NavLink href="/usuarios" Match="NavLinkMatch.All" activeClass="active">Usuarios</NavLink></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        @Body
+    </main>
+</div>
 
     <!-- Footer -->
     <footer class="main-footer">
@@ -88,6 +117,9 @@
 @code {
     private bool mostrarModalclosesesion = false;
     private bool menuInventarioActivo = false;
+    private bool mostrarMenuMovil = false;
+    private bool mostrarSidebarMovil = false;
+
     private async Task CerrarSesion()
     {
         await SesionService.CerrarSesionAsync();
@@ -102,5 +134,15 @@
     {
         mostrarInventario = !mostrarInventario;
         menuInventarioActivo = !menuInventarioActivo;
+    }
+
+    private void ToggleMenu()
+    {
+        mostrarMenuMovil = !mostrarMenuMovil;
+    }
+
+    private void ToggleSidebar()
+    {
+        mostrarSidebarMovil = !mostrarSidebarMovil;
     }
 }
