@@ -1,5 +1,7 @@
 @inherits LayoutComponentBase
 @inject ERP.Blazor.Services.SesionService SesionService
+
+@inject ERP.Blazor.Services.NotificacionService NotificacionesService
 @inject NavigationManager Nav
 
 
@@ -20,11 +22,12 @@
             <div class="menu-movil">
                 <a href="/">Inicio</a>
                 <a href="/configperfil">Perfil</a>
-                <a href="#">Notificaciones</a>
+                <a @onclick="ToggleNotificaciones" class="notificaciones-btn relative">Notificaciones</a>
                 <a @onclick="()=> mostrarModalclosesesion = true">Cerrar sesión</a>
             </div>
         }
         <nav class="top-nav">
+
         <!-- BOTON TOPNAV IR A BIENVENIDA -->
         <a href="/" class="btn-header btn-outline logohouse" id="logohouse"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-file-fill" viewBox="0 0 16 16">
              <path fill-rule="evenodd" d="M4 0h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2"/></svg>
@@ -34,9 +37,46 @@
             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg>
         </a>
         <!-- BOTON TOPNAV IR A NOTIFICACIONES -->
-        <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+        <a @onclick="ToggleNotificaciones" class="notificaciones-btn relative"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
             <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/></svg>
         </a>
+        @if (hayNotificacionesNuevas)
+        {
+            <span class="badge-notificacion"></span>
+        }
+        @if (mostrarNotificaciones)
+        {
+            <div class="notificaciones-modal">
+                <div class="modal-header">
+                    <h4>Notificaciones</h4>
+                    <button class="close-btn" @onclick="ToggleNotificaciones">×</button>
+                </div>
+                <div class="modal-body">
+                    <!-- 🔘 Botón nuevo: Eliminar todas -->
+                    <button class="dropdown-item text-danger text-center fw-bold"
+                            @onclick="EliminarTodasNotificaciones">
+                        <i class="bi bi-trash"></i> Eliminar todas
+                    </button>
+                    @if (notificaciones.Count == 0)
+                    {
+                        <p>No tienes notificaciones nuevas.</p>
+                    }
+                    else
+                    {
+                        <ul>
+                            @foreach (var n in notificaciones)
+                            {
+                                <li>
+                                    @n
+                                    <button class="btn-eliminar" @onclick="() => EliminarNotificacion(n)">×</button>
+                                </li>
+                            }
+                        </ul>
+                        
+                    }
+                </div>
+            </div>
+        }
         <!-- BOTON TOPNAV CERRAR SESION -->
         <a @onclick="()=> mostrarModalclosesesion = true"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z"/>
@@ -113,6 +153,13 @@
     </footer>
 </div>
 
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    <div class="toast-message @toastClass">
+        @mensaje
+    </div>
+}
+
 
 @code {
     private bool mostrarModalclosesesion = false;
@@ -120,15 +167,147 @@
     private bool mostrarMenuMovil = false;
     private bool mostrarSidebarMovil = false;
 
+    private bool mostrarInventario = false;
+
+
+
+    private bool hayNotificacionesNuevas => notificaciones.Any();
+    private System.Threading.Timer? _timer;
+    private int indiceNotificacionActual = 0;
+    private readonly Random random = new();
+    private const string claveNotificacionesDia = "notificaciones_enviadas_hoy";
+    private List<string> notificacionesEnviadasHoy = new();
+    private TimeSpan intervaloNotificacion = TimeSpan.FromSeconds(15);
+
+
+
+    private bool mostrarNotificaciones = false;
+    private List<string> notificaciones = new();
+
+    private string mensaje = "";
+    private string toastClass = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        notificaciones = await NotificacionesService.ObtenerAsync();
+
+        // Bienvenida: usa AgregarAsync (no duplicará)
+        bool bienvenidaYaMostrada = await NotificacionesService.ObtenerBanderaAsync("bienvenida_mostrada");
+        if (!bienvenidaYaMostrada)
+        {
+            await NotificacionesService.AgregarAsync("👋 Bienvenido al sistema GanadApp ERP.");
+            MostrarNotificacion("Bienvenido a GanadApp ERP", "success");
+            await NotificacionesService.GuardarBanderaAsync("bienvenida_mostrada", true);
+        }
+
+        // Inicializar lista local (asegura estados únicos)
+        notificaciones = (await NotificacionesService.ObtenerAsync()).Distinct().ToList();
+
+        // Control diario: si no se generaron hoy, arrancar timer o generar
+        string fechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
+        string ultimaFecha = await NotificacionesService.ObtenerUltimaNotificacionFechaAsync(claveNotificacionesDia);
+        if (ultimaFecha != fechaHoy)
+        {
+            indiceNotificacionActual = 0;
+            notificacionesEnviadasHoy.Clear();
+            await NotificacionesService.GuardarUltimaNotificacionFechaAsync(claveNotificacionesDia);
+        }
+
+        _iniciarTimerNotificaciones();
+    }
+
+    private void _iniciarTimerNotificaciones()
+    {
+        if (_timer != null)
+            return; // Evita duplicar timers
+
+         var delayInicial = TimeSpan.FromSeconds(random.Next(30, 60)); //🟩🟩
+        _timer = new System.Threading.Timer(async _ =>
+        {
+            await EnviarNotificacionPeriodica();
+        },
+        null,
+        delayInicial,   // ⏱ Primer disparo aleatorio
+        Timeout.InfiniteTimeSpan // Luego manejamos manualmente los tiempos
+        );      // Luego se repite
+    }
+
+    private async Task EnviarNotificacionPeriodica()
+    {
+        try
+        {
+            if (indiceNotificacionActual >= notificacionesPredeterminadas.Count)
+            {
+                _timer?.Change(Timeout.Infinite, 0);
+                return;
+            }
+
+            string nueva = notificacionesPredeterminadas[indiceNotificacionActual];
+
+            // Evitar duplicados del mismo día
+            if (!notificacionesEnviadasHoy.Contains(nueva))
+            {
+                notificaciones.Add(nueva);
+                notificacionesEnviadasHoy.Add(nueva);
+
+                await NotificacionesService.GuardarAsync(notificaciones);
+                MostrarNotificacion(nueva, "success");
+            }
+
+            indiceNotificacionActual++;
+
+            // ⏱ Calcular un nuevo tiempo aleatorio entre 1 y 5 minutos
+            var siguienteIntervalo = TimeSpan.FromMinutes(random.Next(2, 10));  //🟩🟩
+
+            // Reiniciar el timer con ese intervalo
+            _timer?.Change(siguienteIntervalo, Timeout.InfiniteTimeSpan);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error en notificaciones automáticas: {ex.Message}");
+        }
+    }
+
+    private readonly List<string> notificacionesPredeterminadas = new()
+    {
+        "📞 Línea de atención al cliente: +57 300 538 6979",
+        "💡 Descubre nuevas funciones en GanadApp: más control, más productividad",
+        "📰 Novedades GanadApp: actualización de módulo de inventario",
+        "✅ Consejo: revisa las métricas semanalmente para mantener tus datos al día",
+        "🎯 Recuerda mantener tu sesión segura: cierra al finalizar tu jornada",
+        "🌱 Cada dato cuenta. ¡Organiza tu ganado y crece con GanadApp!",
+        "🚀 Tu esfuerzo impulsa la innovación. ¡Sigue adelante!",
+        "💚 En GanadApp creemos en el progreso diario. Pequeños pasos, grandes resultados.",
+        "📊 ¿Sabías que puedes analizar tus ventas por mes? Explora el panel de reportes.",
+        "🧩 Optimiza tu inventario: revisa los productos próximos a vencer.",
+        "💬 ‘El éxito es la suma de pequeños esfuerzos repetidos día tras día.’ – GanadApp",
+        "🔥 ¡Mantén tus registros al día y evita sorpresas! GanadApp te acompaña.",
+        "🌟 Consejo del día: usa el módulo de reportes para detectar tendencias positivas."
+    };
+
+    private void ToggleNotificaciones() => mostrarNotificaciones = !mostrarNotificaciones;
+
+    private async Task EliminarNotificacion(string n)
+    {
+        await NotificacionesService.EliminarAsync(n);
+        notificaciones.Remove(n);
+    }
+
+    private async Task EliminarTodasNotificaciones()
+    {
+        notificaciones.Clear();
+        await NotificacionesService.LimpiarAsync();
+        StateHasChanged();
+    }
+
     private async Task CerrarSesion()
     {
         await SesionService.CerrarSesionAsync();
+        await NotificacionesService.EliminarClaveAsync("bienvenida_mostrada");
+        _timer?.Dispose();
+        _timer = null;
         Nav.NavigateTo("/", forceLoad: true);
     }
-}
-
-@code {
-    private bool mostrarInventario = false;
 
     private void ToggleInventario()
     {
@@ -144,5 +323,17 @@
     private void ToggleSidebar()
     {
         mostrarSidebarMovil = !mostrarSidebarMovil;
+    }
+
+    // ✅ Método de toast (temporal en pantalla)
+    private async void MostrarNotificacion(string texto, string tipo)
+    {
+        mensaje = texto;
+        toastClass = tipo;
+        StateHasChanged();
+
+        await Task.Delay(4000);
+        mensaje = "";
+        StateHasChanged();
     }
 }

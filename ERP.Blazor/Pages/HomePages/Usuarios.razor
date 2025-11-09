@@ -29,7 +29,7 @@
 
         <!-- Barra de búsqueda -->
         <div class="search-bar">
-            <input type="text" placeholder="Buscar usuario por nombre o correo..." @bind="filtro" />
+            <input type="text" placeholder="Buscar usuario por nombre o correo..." @bind="filtro" @bind:event="oninput" />
             <button class="btn btn-secondary" @onclick="BuscarUsuarios">Buscar</button>
             <button class="btn btn-primary" @onclick="AbrirModalNuevo">+ Nuevo Usuario</button>
         </div>
@@ -132,11 +132,13 @@
     private UsuarioDTO? usuarioEditando;
     private bool mostrarModal = false;
     private string filtro = string.Empty;
+    private List<UsuarioDTO> todosLosUsuarios = new(); //Lista para filtar
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
+            todosLosUsuarios = await UsuarioService.ObtenerUsuariosAsync();
             usuarios = await UsuarioService.ObtenerUsuariosAsync();
             roles = await UsuarioService.ObtenerRolesAsync();
         }
@@ -151,9 +153,24 @@
         await VerificaodorSesion();
     }
 
-    private async Task BuscarUsuarios()
+    private void BuscarUsuarios()
     {
-        usuarios = await UsuarioService.BuscarUsuariosAsync(filtro);
+        if (string.IsNullOrWhiteSpace(filtro))
+    {
+        usuarios = new List<UsuarioDTO>(todosLosUsuarios);
+    }
+    else
+    {
+        string texto = filtro.Trim().ToLower();
+        usuarios = todosLosUsuarios
+            .Where(u =>
+            (u.Nombre?.ToLower().Contains(texto) ?? false)
+            || (u.Apellido?.ToLower().Contains(texto) ?? false)
+            || (u.Correo?.ToLower().Contains(texto) ?? false)
+            || u.Id.ToString().Contains(texto)
+            )
+            .ToList();
+        }
     }
 
     private void AbrirModalNuevo()
@@ -196,12 +213,6 @@
         await UsuarioService.CambiarEstadoAsync(u.Id, !u.EstadoCuenta);
         usuarios = await UsuarioService.ObtenerUsuariosAsync();
     }
-    /* por revisar
-    private async Task EliminarUsuario(int id)
-    {
-        await UsuarioService.EliminarUsuarioAsync(id);
-        usuarios = await UsuarioService.ObtenerUsuariosAsync();
-    }*/
 
     //VERIFICAR SEASION
     private bool sesionVerificada = true;

@@ -25,7 +25,7 @@ else
             <p class="main-descriptions">Administra los proveedores registrados en el sistema ERP.</p>
 
             <div class="search-bar">
-                <input type="text" placeholder="Buscar proveedor..." @bind="filtro" />
+                <input type="text" placeholder="Buscar proveedor..." @bind="filtro" @bind:event="oninput" />
                 <button class="btn btn-secondary" @onclick="BuscarProveedores">Buscar</button>
                 <button class="btn btn-primary" @onclick="AbrirModalNuevo">+ Nuevo Proveedor</button>
             </div>
@@ -78,6 +78,9 @@ else
                 </tbody>
             </table>
         </div>
+        <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path d="M0,160 C480,240 960,80 1440,160 L1440,320 L0,320 Z"></path>
+        </svg>
     </div>
 }
 
@@ -135,6 +138,7 @@ else
     private bool sesionVerificada = true;
     private bool cargando = true;
     private string mensajeError = string.Empty;
+    private List<ProveedorDTO> todosLosproveedores = new(); //Lista para filtar
 
     protected override async Task OnInitializedAsync()
     {
@@ -159,13 +163,12 @@ else
         try
         {
             cargando = true;
-            proveedores = await ProveedoresService.ObtenerProveedoresAsync();
-            proveedores = proveedores.Where(x => x.Estado).ToList();
+            todosLosproveedores = await ProveedoresService.ObtenerProveedoresAsync();
+            proveedores = todosLosproveedores.Where(x => x.Estado).ToList();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error cargando proveedores: {ex.Message}");
-            proveedores = new List<ProveedorDTO>();
         }
         finally
         {
@@ -175,24 +178,18 @@ else
 
     private async Task BuscarProveedores()
     {
-        try
-        {
-            cargando = true;
-            if (string.IsNullOrWhiteSpace(filtro))
-                proveedores = await ProveedoresService.ObtenerProveedoresAsync();
-            else
-                proveedores = await ProveedoresService.BuscarProveedoresAsync(filtro);
-
-            proveedores = proveedores.Where(x => x.Estado).ToList();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error buscando proveedores: {ex.Message}");
-            proveedores = new List<ProveedorDTO>();
-        }
-        finally
-        {
-            cargando = false;
+        if (string.IsNullOrWhiteSpace(filtro))
+    {
+        proveedores = new List<ProveedorDTO>(todosLosproveedores);
+    }
+    else
+    {
+        string texto = filtro.Trim().ToLower();
+        proveedores = todosLosproveedores
+            .Where(p => (p.Nombre?.ToLower().Contains(texto) ?? false)
+                         || p.IdProveedores.ToString().Contains(texto)
+                         || p.CC.ToString().Contains(texto))
+                .ToList();
         }
     }
 
