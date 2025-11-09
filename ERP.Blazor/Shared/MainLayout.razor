@@ -260,7 +260,7 @@
             indiceNotificacionActual++;
 
             // ⏱ Calcular un nuevo tiempo aleatorio entre 1 y 5 minutos
-            var siguienteIntervalo = TimeSpan.FromMinutes(random.Next(2, 10));  //🟩🟩
+            var siguienteIntervalo = TimeSpan.FromMinutes(random.Next(5, 40));  //🟩🟩
 
             // Reiniciar el timer con ese intervalo
             _timer?.Change(siguienteIntervalo, Timeout.InfiniteTimeSpan);
