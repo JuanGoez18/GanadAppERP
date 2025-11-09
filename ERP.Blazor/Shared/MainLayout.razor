@@ -189,7 +189,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        notificaciones = await NotificacionesService.ObtenerAsync();
+        notificaciones = (await NotificacionesService.ObtenerAsync()).Distinct().ToList();
 
         // Bienvenida: usa AgregarAsync (no duplicará)
         bool bienvenidaYaMostrada = await NotificacionesService.ObtenerBanderaAsync("bienvenida_mostrada");
@@ -210,6 +210,7 @@
         {
             indiceNotificacionActual = 0;
             notificacionesEnviadasHoy.Clear();
+
             await NotificacionesService.GuardarUltimaNotificacionFechaAsync(claveNotificacionesDia);
         }
 
@@ -221,7 +222,7 @@
         if (_timer != null)
             return; // Evita duplicar timers
 
-         var delayInicial = TimeSpan.FromSeconds(random.Next(30, 60)); //🟩🟩
+        var delayInicial = TimeSpan.FromSeconds(random.Next(30, 60)); //🟩🟩
         _timer = new System.Threading.Timer(async _ =>
         {
             await EnviarNotificacionPeriodica();
@@ -244,13 +245,15 @@
 
             string nueva = notificacionesPredeterminadas[indiceNotificacionActual];
 
-            // Evitar duplicados del mismo día
-            if (!notificacionesEnviadasHoy.Contains(nueva))
-            {
-                notificaciones.Add(nueva);
-                notificacionesEnviadasHoy.Add(nueva);
+            var persistidas = (await NotificacionesService.ObtenerAsync()).Distinct().ToList();
 
-                await NotificacionesService.GuardarAsync(notificaciones);
+            // Evitar duplicados del mismo día
+            if (!persistidas.Contains(nueva))
+            {
+                persistidas.Add(nueva);
+                await NotificacionesService.GuardarAsync(persistidas);
+
+                notificaciones = persistidas;
                 MostrarNotificacion(nueva, "success");
             }
 

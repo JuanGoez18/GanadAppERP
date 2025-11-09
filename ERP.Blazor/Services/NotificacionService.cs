@@ -7,6 +7,7 @@ namespace ERP.Blazor.Services
     {
         private readonly IJSRuntime _js;
         private const string STORAGE_KEY = "notificaciones";
+        private const string STORAGE_KEY_HOY = "notificaciones_enviadas_hoy";
 
         public NotificacionService(IJSRuntime js)
         {
@@ -87,6 +88,25 @@ namespace ERP.Blazor.Services
         public async Task EliminarClaveAsync(string clave)
         {
             await _js.InvokeVoidAsync("localStorage.removeItem", clave);
+        }
+
+        // 🟢 NUEVOS MÉTODOS: guardar y leer lista de notificaciones enviadas hoy
+        public async Task GuardarNotificacionesEnviadasHoyAsync(List<string> lista)
+        {
+            var json = JsonSerializer.Serialize(lista.Distinct().ToList());
+            await _js.InvokeVoidAsync("localStorage.setItem", STORAGE_KEY_HOY, json);
+        }
+
+        public async Task<List<string>> ObtenerNotificacionesEnviadasHoyAsync()
+        {
+            var json = await _js.InvokeAsync<string>("localStorage.getItem", STORAGE_KEY_HOY);
+            if (string.IsNullOrEmpty(json)) return new List<string>();
+            return JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
+        }
+
+        public async Task LimpiarNotificacionesEnviadasHoyAsync()
+        {
+            await _js.InvokeVoidAsync("localStorage.removeItem", STORAGE_KEY_HOY);
         }
     }
 }
