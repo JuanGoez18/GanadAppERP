@@ -1,0 +1,284 @@
+@page "/ganado"
+@layout MainLayout
+@using ERP.Blazor.Models
+@inject ERP.Blazor.Services.GanadoService GanadoService
+@inject ERP.Blazor.Services.SesionService SesionService
+@inject NavigationManager Nav
+
+<PageTitle>Ganado</PageTitle>
+
+@if (!sesionVerificada)
+{
+    <div class="modal-nosesion">
+        <div class="nosesion-container">
+            <h2>Sesión no activa</h2>
+            <p>Debes iniciar sesión primero.</p>
+            <button class="btn-modal" @onclick="VolverABienvenida">Volver</button>
+        </div>
+    </div>
+}
+else
+{
+    <div class="auth-container2">
+        <div class="auth-card2">
+            <h1 class="main-titles">Gestión de Ganado</h1>
+            <p class="main-descriptions">Administra los registros de ganado registrados en el sistema ERP.</p>
+
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar ganado..." @bind="filtro" />
+                <button class="btn btn-secondary" @onclick="BuscarGanado">Buscar</button>
+                <button class="btn btn-primary" @onclick="AbrirModalNuevo">+ Nuevo Ganado</button>
+            </div>
+
+            <table class="usuarios-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Código Arete</th>
+                        <th>Raza</th>
+                        <th>Edad</th>
+                        <th>Peso</th>
+                        <th>Estado de Salud</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (cargando)
+                    {
+                        <tr><td colspan="7" class="text-center">Cargando registros de ganado...</td></tr>
+                    }
+                    else if (ganado == null || ganado.Count == 0)
+                    {
+                        <tr><td colspan="7" class="text-center">No se encontraron registros.</td></tr>
+                    }
+                    else
+                    {
+                        @foreach (var g in ganado.Where(x => x.Estado))
+                        {
+                            <tr>
+                                <td>@g.IdGanado</td>
+                                <td>@g.CodigoArete</td>
+                                <td>@g.Raza</td>
+                                <td>@($"{g.Edad} años")</td>
+                                <td>@($"{g.Peso:N2} kg")</td>
+                                <td>@g.EstadoSalud</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info" @onclick="() => EditarGanado(g)">Editar</button>
+                                    <button class="btn btn-sm btn-danger" @onclick="() => ConfirmEliminar(g.IdGanado)">Eliminar</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path d="M0,160 C480,240 960,80 1440,160 L1440,320 L0,320 Z"></path>
+        </svg>
+    </div>
+}
+
+@if (mostrarModal)
+{
+    <div class="modal-generico-over">
+        <div class="modal-generico">
+            <h3>@(ganadoEditando == null ? "Nuevo Ganado" : "Editar Ganado")</h3>
+
+            @if (!string.IsNullOrEmpty(mensajeError))
+            {
+                <div class="alert alert-danger">@mensajeError</div>
+            }
+
+            <div class="modal-generico-body">
+                <label>Código Arete</label>
+                <input type="text" class="form-control" @bind="form.CodigoArete" />
+
+                <label>Raza</label>
+                <input type="text" class="form-control" @bind="form.Raza" />
+
+                <label>Edad</label>
+                <input type="number" class="form-control" @bind="form.Edad" min="0" />
+
+                <label>Peso</label>
+                <input type="number" class="form-control" @bind="form.Peso" min="0" />
+
+                <label>Estado de Salud</label>
+                <input type="text" class="form-control" @bind="form.EstadoSalud" />
+            </div>
+
+            <div class="modal-generico-footer">
+                <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
+                <button class="btn btn-success" @onclick="GuardarGanado">Guardar</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<GanadoDTO> ganado = new();
+    private GanadoDTO form = new();
+    private GanadoDTO? ganadoEditando;
+    private bool mostrarModal = false;
+    private string filtro = string.Empty;
+    private bool sesionVerificada = true;
+    private bool cargando = true;
+    private string mensajeError = string.Empty;
+    private string rolUsuario = string.Empty;
+    private int idUsuario;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await VerificarSesionAsync();
+        if (sesionVerificada)
+            await CargarGanadoAsync();
+    }
+
+    private async Task VerificarSesionAsync()
+    {
+        try
+        {
+            sesionVerificada = await SesionService.HaySesionAsync();
+            if (sesionVerificada)
+            {
+                rolUsuario = await SesionService.ObtenerRolUsuarioAsync();
+                idUsuario = await SesionService.ObtenerIdUsuarioAsync();
+            }
+        }
+        catch
+        {
+            sesionVerificada = false;
+        }
+    }
+
+    private async Task CargarGanadoAsync()
+    {
+        try
+        {
+            cargando = true;
+            ganado = await GanadoService.ObtenerGanadoAsync();
+            ganado = ganado.Where(x => x.Estado).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error cargando ganado: {ex.Message}");
+            ganado = new List<GanadoDTO>();
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private async Task BuscarGanado()
+    {
+        try
+        {
+            cargando = true;
+            var lista = await GanadoService.ObtenerGanadoAsync();
+            if (!string.IsNullOrWhiteSpace(filtro))
+            {
+                ganado = lista
+                    .Where(x => x.CodigoArete.Contains(filtro, StringComparison.OrdinalIgnoreCase)
+                             || x.Raza.Contains(filtro, StringComparison.OrdinalIgnoreCase)
+                             || x.EstadoSalud.Contains(filtro, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+            else
+            {
+                ganado = lista;
+            }
+            ganado = ganado.Where(x => x.Estado).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error buscando ganado: {ex.Message}");
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private void AbrirModalNuevo()
+    {
+        ganadoEditando = null;
+        form = new GanadoDTO { Estado = true };
+        mostrarModal = true;
+    }
+
+    private void EditarGanado(GanadoDTO g)
+    {
+        ganadoEditando = g;
+        form = new GanadoDTO
+        {
+            IdGanado = g.IdGanado,
+            CodigoArete = g.CodigoArete,
+            Raza = g.Raza,
+            Edad = g.Edad,
+            Peso = g.Peso,
+            EstadoSalud = g.EstadoSalud,
+            Supervisor = g.Supervisor,
+            Estado = g.Estado
+        };
+        mostrarModal = true;
+    }
+
+    private async Task GuardarGanado()
+    {
+        mensajeError = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(form.CodigoArete) ||
+            string.IsNullOrWhiteSpace(form.Raza) ||
+            string.IsNullOrWhiteSpace(form.EstadoSalud))
+        {
+            mensajeError = "Todos los campos son obligatorios.";
+            return;
+        }
+
+        // 🔹 Validación de edad y peso
+        if (form.Edad <= 0)
+        {
+            mensajeError = "La edad debe ser mayor que 0.";
+            return;
+        }
+
+        if (form.Peso <= 0)
+        {
+            mensajeError = "El peso debe ser mayor que 0.";
+            return;
+        }
+
+        // Asignar el supervisor automáticamente según el usuario en sesión
+        form.Supervisor = idUsuario;
+
+        bool ok;
+        if (ganadoEditando == null)
+            ok = await GanadoService.CrearGanadoAsync(form);
+        else
+            ok = await GanadoService.ActualizarGanadoAsync(form.IdGanado, form);
+
+        if (!ok)
+        {
+            mensajeError = "Error al guardar el registro.";
+            return;
+        }
+
+        mostrarModal = false;
+        await CargarGanadoAsync();
+    }
+
+    private async Task ConfirmEliminar(int id)
+    {
+        var ok = await GanadoService.EliminarGanadoAsync(id);
+        if (!ok)
+        {
+            mensajeError = "Error al eliminar el registro.";
+            return;
+        }
+
+        await CargarGanadoAsync();
+    }
+
+    private void CerrarModal() => mostrarModal = false;
+    private void VolverABienvenida() => Nav.NavigateTo("/", forceLoad: true);
+}

@@ -1,0 +1,192 @@
+@page "/configperfil"
+@layout ERP.Blazor.Shared.EmptyLayout
+@inject HttpClient Http
+@inject NavigationManager Nav
+@inject ERP.Blazor.Services.SesionService SesionService
+
+<div class="auth-container">
+    <div class="auth-card3">
+        <h2>Mi Perfil</h2>
+
+        @if (usuario != null)
+        {
+            <div class="perfil-form">
+                <label>Nombre</label>
+                <input class="form-control" @bind="usuario.Nombre" />
+
+                <label>Apellido</label>
+                <input class="form-control" @bind="usuario.Apellido" />
+
+                <label>Correo</label>
+                <input class="form-control" @bind="usuario.Correo" disabled />
+
+                <label>CC</label>
+                <input class="form-control" @bind="usuario.CC" />
+
+                <label>Edad</label>
+                <input type="number" class="form-control" @bind="usuario.Edad" />
+
+                <label>Estado Civil</label>
+                <div class="form-set">
+                <select class="form-control" @bind="usuario.Estado_Civil">
+                    <option value="">Seleccione una opción</option>
+                    <option value="Soltero">Soltero</option>
+                    <option value="Casado">Casado</option>
+                    <option value="Divorciado">Divorciado</option>
+                    <option value="Viudo">Viudo</option>
+                    <option value="Unión libre">Unión libre</option>
+                </select>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="25" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
+                </div>
+
+                <label>Sexo</label>
+                <div class="form-set">
+                <select class="form-control" @bind="usuario.Sexo">
+                    <option value="">Seleccione una opción</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Otro">Otro</option>
+                </select>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="25" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                </svg>
+                </div>
+
+                <div class="perfil-buttons">
+                    <button class="btn1" @onclick="Volver">Volver</button>
+                    <button class="btn2" @onclick="GuardarCambios">Guardar cambios</button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>Cargando datos...</p>
+        }
+    </div>
+    <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path d="M0,160 C480,240 960,80 1440,160 L1440,320 L0,320 Z"></path>
+    </svg>
+</div>
+
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    <div class="toast-message @toastClass">@mensaje</div>
+}
+
+@code {
+    private UsuarioDTO? usuario;
+    private UsuarioDTO? copiaOriginal;
+    private string mensaje = "";
+    private string toastClass = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        usuario = await SesionService.ObtenerSesionAsync<UsuarioDTO>();
+
+        if (usuario == null)
+        {
+            Console.WriteLine("[ERROR] No hay usuario válido en sesión. Redirigiendo al login...");
+            Nav.NavigateTo("/login");
+            return;
+        }
+
+        try
+        {
+            var response = await Http.GetAsync($"http://localhost:5223/api/AdminUsuarios/{usuario.Id_Usuarios}");
+            if (response.IsSuccessStatusCode)
+            {
+                usuario = await response.Content.ReadFromJsonAsync<UsuarioDTO>();
+                copiaOriginal = new UsuarioDTO
+                {
+                    Id_Usuarios = usuario.Id_Usuarios,
+                    Nombre = usuario.Nombre,
+                    Apellido = usuario.Apellido,
+                    Correo = usuario.Correo,
+                    CC = usuario.CC,
+                    Edad = usuario.Edad,
+                    Estado_Civil = usuario.Estado_Civil,
+                    Sexo = usuario.Sexo
+                };
+            }
+            else
+            {
+                MostrarNotificacion("No se pudo cargar la información del perfil", "error");
+            }
+        }
+        catch (Exception ex)
+        {
+            MostrarNotificacion("Error al obtener datos del servidor", "error");
+            Console.Error.WriteLine(ex);
+        }
+    }
+
+    private async Task GuardarCambios()
+    {
+        if (usuario == null || copiaOriginal == null)
+            return;
+
+        // 🔹 Detectar si hubo cambios
+        if (System.Text.Json.JsonSerializer.Serialize(usuario) == System.Text.Json.JsonSerializer.Serialize(copiaOriginal))
+        {
+            MostrarNotificacion("No hay cambios para guardar", "caution");
+            return;
+        }
+
+        try
+        {
+            var response = await Http.PutAsJsonAsync($"http://localhost:5223/api/AdminUsuarios/{usuario.Id_Usuarios}", usuario);
+
+            if (response.IsSuccessStatusCode)
+            {
+                await SesionService.GuardarSesionAsync(usuario);
+                MostrarNotificacion("Perfil actualizado correctamente", "success");
+                copiaOriginal = System.Text.Json.JsonSerializer.Deserialize<UsuarioDTO>(
+                    System.Text.Json.JsonSerializer.Serialize(usuario))!;
+                    await Task.Delay(3000);
+                    Nav.NavigateTo("/home");
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                MostrarNotificacion("Error al actualizar: " + error, "error");
+            }
+        }
+        catch (Exception ex)
+        {
+            MostrarNotificacion("Error al guardar cambios", "error");
+            Console.Error.WriteLine(ex);
+        }
+    }
+
+    private void Volver()
+    {
+        Nav.NavigateTo("/home");
+    }
+
+    private void MostrarNotificacion(string texto, string tipo)
+    {
+        mensaje = texto;
+        toastClass = tipo;
+        StateHasChanged();
+        InvokeAsync(async () =>
+        {
+            await Task.Delay(2000);
+            mensaje = "";
+            StateHasChanged();
+        });
+    }
+
+    public class UsuarioDTO
+    {
+        public int Id_Usuarios { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Apellido { get; set; } = string.Empty;
+        public string Correo { get; set; } = string.Empty;
+        public string CC { get; set; } = string.Empty;
+        public int Edad { get; set; }
+        public string Estado_Civil { get; set; } = string.Empty;
+        public string Sexo { get; set; } = string.Empty;
+    }
+}

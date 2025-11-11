@@ -1,0 +1,42 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TuProyecto.Modelos
+{
+    [Table("ganado")]
+    public class Ganado
+    {
+        [Key]
+        [Column("id_ganado")]
+        public int IdGanado { get; set; }
+
+        [Column("codigo_arete")]
+        [Required(ErrorMessage = "El código de arete es obligatorio")]
+        public string CodigoArete { get; set; }
+
+        [Column("raza")]
+        [Required(ErrorMessage = "La raza es obligatoria")]
+        public string Raza { get; set; }
+
+        [Column("edad")]
+        [Required(ErrorMessage = "La edad es obligatoria")]
+        public int Edad { get; set; }
+
+        [Column("peso")]
+        [Required(ErrorMessage = "El peso es obligatorio")]
+        public decimal Peso { get; set; }
+
+        [Column("estado_salud")]
+        [Required(ErrorMessage = "El estado de salud es obligatorio")]
+        public string EstadoSalud { get; set; }
+
+        // 🔹 Identifica qué usuario (supervisor) registró este ganado
+        [Column("supervisor")]
+        [Required(ErrorMessage = "Debe asignarse un supervisor al registro del ganado")]
+        public int Supervisor { get; set; }
+
+        // 🔹 Campo para el borrado lógico (activo/inactivo)
+        [Column("estado")]
+        public bool Estado { get; set; } = true;
+    }
+}

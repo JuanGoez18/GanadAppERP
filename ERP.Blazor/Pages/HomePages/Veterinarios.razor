@@ -1,0 +1,275 @@
+@page "/veterinarios"
+@layout MainLayout
+@using ERP.Blazor.Models
+@inject ERP.Blazor.Services.VeterinariosService VeterinariosService
+@inject ERP.Blazor.Services.SesionService SesionService
+@inject NavigationManager Nav
+
+<PageTitle>Veterinarios</PageTitle>
+
+@if (!sesionVerificada)
+{
+    <div class="modal-nosesion">
+        <div class="nosesion-container">
+            <h2>Sesión no activa</h2>
+            <p>Debes iniciar sesión primero.</p>
+            <button class="btn-modal" @onclick="VolverABienvenida">Volver</button>
+        </div>
+    </div>
+}
+else
+{
+    <div class="auth-container2">
+        <div class="auth-card2">
+            <h1 class="main-titles">Gestión de Veterinarios</h1>
+            <p class="main-descriptions">Administra los veterinarios registrados en el sistema ERP.</p>
+
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar veterinario..."  @bind="filtro" @bind:event="oninput" />
+                <button class="btn btn-secondary" @onclick="BuscarVeterinarios">Buscar</button>
+                <button class="btn btn-primary" @onclick="AbrirModalNuevo">+ Nuevo Veterinario</button>
+            </div>
+
+            <table class="usuarios-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Edad</th>
+                        <th>C.C.</th>
+                        <th>Sexo</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Entidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (cargando)
+                    {
+                        <tr><td colspan="10" class="text-center">Cargando veterinarios...</td></tr>
+                    }
+                    else if (veterinarios == null || veterinarios.Count == 0)
+                    {
+                        <tr><td colspan="10" class="text-center">No se encontraron veterinarios.</td></tr>
+                    }
+                    else
+                    {
+                        @foreach (var v in veterinarios.Where(x => x.Estado))
+                        {
+                            <tr>
+                                <td>@v.IdVeterinarios</td>
+                                <td>@v.Nombre</td>
+                                <td>@v.Apellido</td>
+                                <td>@v.Edad</td>
+                                <td>@v.CC</td>
+                                <td>@v.Sexo</td>
+                                <td>@v.Direccion</td>
+                                <td>@v.Telefono</td>
+                                <td>@v.Entidad</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info" @onclick="() => EditarVeterinario(v)">Editar</button>
+                                    <button class="btn btn-sm btn-danger" @onclick="() => ConfirmEliminar(v.IdVeterinarios)">Eliminar</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path d="M0,160 C480,240 960,80 1440,160 L1440,320 L0,320 Z"></path>
+        </svg>
+    </div>
+}
+
+@if (mostrarModal)
+{
+    <div class="modal-generico-over">
+        <div class="modal-generico">
+            <h3>@(veterinarioEditando == null ? "Nuevo Veterinario" : "Editar Veterinario")</h3>
+
+            @if (!string.IsNullOrEmpty(mensajeError))
+            {
+                <div class="alert alert-danger">@mensajeError</div>
+            }
+
+            <div class="modal-generico-body">
+                <label>Nombre</label>
+                <input type="text" class="form-control" @bind="form.Nombre" />
+
+                <label>Apellido</label>
+                <input type="text" class="form-control" @bind="form.Apellido" />
+
+                <label>Edad</label>
+                <input type="number" class="form-control" @bind="form.Edad" min="1" />
+
+                <label>C.C.</label>
+                <input type="text" class="form-control" @bind="form.CC" />
+
+                <label>Sexo</label>
+                <input type="text" class="form-control" @bind="form.Sexo" />
+
+                <label>Dirección</label>
+                <input type="text" class="form-control" @bind="form.Direccion" />
+
+                <label>Teléfono</label>
+                <input type="text" class="form-control" @bind="form.Telefono" />
+
+                <label>Entidad</label>
+                <input type="text" class="form-control" @bind="form.Entidad" />
+            </div>
+
+            <div class="modal-generico-footer">
+                <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
+                <button class="btn btn-success" @onclick="GuardarVeterinario">Guardar</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<VeterinarioDTO> veterinarios = new();
+    private VeterinarioDTO form = new VeterinarioDTO();
+    private VeterinarioDTO? veterinarioEditando;
+    private bool mostrarModal = false;
+    private string filtro = string.Empty;
+    private bool sesionVerificada = true;
+    private bool cargando = true;
+    private string mensajeError = string.Empty;
+    private List<VeterinarioDTO> todosLosvaterinarios = new(); //Lista para filtar
+
+    protected override async Task OnInitializedAsync()
+    {
+        await VerificarSesionAsync();
+        await CargarVeterinariosAsync();
+    }
+
+    private async Task VerificarSesionAsync()
+    {
+        try
+        {
+            sesionVerificada = await SesionService.HaySesionAsync();
+        }
+        catch
+        {
+            sesionVerificada = false;
+        }
+    }
+
+    private async Task CargarVeterinariosAsync()
+    {
+        try
+        {
+            cargando = true;
+            todosLosvaterinarios = await VeterinariosService.ObtenerVeterinariosAsync();
+            veterinarios = todosLosvaterinarios.Where(x => x.Estado).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error cargando veterinarios: {ex.Message}");
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private void BuscarVeterinarios()
+    {
+        {
+        if (string.IsNullOrWhiteSpace(filtro))
+        {
+            veterinarios = new List<VeterinarioDTO>(todosLosvaterinarios);
+        }
+        else
+        {
+            var texto = filtro.Trim().ToLower();
+            veterinarios = todosLosvaterinarios
+                .Where(v =>
+                (v.Nombre?.ToLower().Contains(texto) ?? false)
+                || (v.Apellido?.ToLower().Contains(texto) ?? false)
+                || (v.CC?.ToLower().Contains(texto) ?? false)
+                || v.IdVeterinarios.ToString().Contains(texto)
+                )
+                .ToList();
+        }
+    }
+    }
+
+    private void AbrirModalNuevo()
+    {
+        veterinarioEditando = null;
+        form = new VeterinarioDTO { Estado = true };
+        mostrarModal = true;
+    }
+
+    private void EditarVeterinario(VeterinarioDTO v)
+    {
+        veterinarioEditando = v;
+        form = new VeterinarioDTO
+        {
+            IdVeterinarios = v.IdVeterinarios,
+            Nombre = v.Nombre,
+            Apellido = v.Apellido,
+            Edad = v.Edad,
+            CC = v.CC,
+            Sexo = v.Sexo,
+            Direccion = v.Direccion,
+            Telefono = v.Telefono,
+            Entidad = v.Entidad,
+            Estado = v.Estado
+        };
+        mostrarModal = true;
+    }
+
+    private async Task GuardarVeterinario()
+    {
+        mensajeError = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(form.Nombre) ||
+            string.IsNullOrWhiteSpace(form.Apellido) ||
+            form.Edad <= 0 ||
+            string.IsNullOrWhiteSpace(form.CC) ||
+            string.IsNullOrWhiteSpace(form.Sexo) ||
+            string.IsNullOrWhiteSpace(form.Direccion) ||
+            string.IsNullOrWhiteSpace(form.Telefono) ||
+            string.IsNullOrWhiteSpace(form.Entidad))
+        {
+            mensajeError = "Todos los campos son obligatorios y válidos.";
+            return;
+        }
+
+        bool ok;
+
+        if (veterinarioEditando == null)
+            ok = await VeterinariosService.CrearVeterinarioAsync(form);
+        else
+            ok = await VeterinariosService.ActualizarVeterinarioAsync(form);
+
+        if (!ok)
+        {
+            mensajeError = "Error al guardar veterinario.";
+            return;
+        }
+
+        mostrarModal = false;
+        await CargarVeterinariosAsync();
+    }
+
+    private async Task ConfirmEliminar(int id)
+    {
+        var ok = await VeterinariosService.EliminarVeterinarioAsync(id);
+        if (!ok)
+        {
+            mensajeError = "Error al eliminar veterinario.";
+            return;
+        }
+
+        await CargarVeterinariosAsync();
+    }
+
+    private void CerrarModal() => mostrarModal = false;
+    private void VolverABienvenida() => Nav.NavigateTo("/", forceLoad: true);
+}
