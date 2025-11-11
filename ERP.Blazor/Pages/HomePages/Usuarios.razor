@@ -29,61 +29,59 @@
 
         <!-- Barra de búsqueda -->
         <div class="search-bar">
-            <input type="text" placeholder="Buscar usuario por nombre o correo..." @bind="filtro" />
+            <input type="text" placeholder="Buscar usuario por nombre o correo..." @bind="filtro" @bind:event="oninput" />
             <button class="btn btn-secondary" @onclick="BuscarUsuarios">Buscar</button>
             <button class="btn btn-primary" @onclick="AbrirModalNuevo">+ Nuevo Usuario</button>
         </div>
 
         <!-- Tabla de usuarios -->
-        <table class="usuarios-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Rol</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (usuarios == null)
-                {
+        <div class="tabla-responsive">
+            <table class="usuarios-table">
+                <thead>
                     <tr>
-                        <td colspan="6" class="text-center">Cargando usuarios...</td>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
                     </tr>
-                }
-                else if (usuarios.Count == 0)
-                {
-                    <tr>
-                        <td colspan="6" class="text-center">No se encontraron usuarios.</td>
-                    </tr>
-                }
-                else
-                {
-                    @foreach (var u in usuarios)
+                </thead>
+                <tbody>
+                    @if (usuarios == null)
                     {
-                        <tr>
-                            <td>@u.Id</td>
-                            <td>@u.Nombre @u.Apellido</td>
-                            <td>@u.Correo</td>
-                            <td>@u.Rol</td>
-                            <td>
-                                <span class="estado @(u.EstadoCuenta ? "activo" : "inactivo")">
-                                    @(u.EstadoCuenta ? "Activo" : "Inactivo")
-                                </span>
-                            </td>
-                            <td>
-                                <button class="btn btn-sm btn-info" @onclick="() => EditarUsuario(u)">Editar</button>
-                                <button class="btn btn-sm btn-warning" @onclick="() => CambiarEstado(u)">
-                                    @(u.EstadoCuenta ? "Desactivar" : "Activar")
-                                </button>
-                            </td>
-                        </tr>
+                        <tr><td colspan="6" class="text-center">Cargando usuarios...</td></tr>
                     }
-                }
-            </tbody>
-        </table>
+                    else if (usuarios.Count == 0)
+                    {
+                        <tr><td colspan="6" class="text-center">No se encontraron usuarios.</td></tr>
+                    }
+                    else
+                    {
+                        @foreach (var u in usuarios)
+                        {
+                            <tr>
+                                <td data-label="ID">@u.Id</td>
+                                <td data-label="Nombre">@u.Nombre @u.Apellido</td>
+                                <td data-label="Correo">@u.Correo</td>
+                                <td data-label="Rol">@u.Rol</td>
+                                <td data-label="Estado">
+                                    <span class="estado @(u.EstadoCuenta ? "activo" : "inactivo")">
+                                        @(u.EstadoCuenta ? "Activo" : "Inactivo")
+                                    </span>
+                                </td>
+                                <td data-label="Acciones">
+                                    <button class="btn btn-sm btn-info" @onclick="() => EditarUsuario(u)">Editar</button>
+                                    <button class="btn btn-sm btn-warning" @onclick="() => CambiarEstado(u)">
+                                        @(u.EstadoCuenta ? "Desactivar" : "Activar")
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
     <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
         <path d="M0,160 C480,240 960,80 1440,160 L1440,320 L0,320 Z"></path>
@@ -132,11 +130,13 @@
     private UsuarioDTO? usuarioEditando;
     private bool mostrarModal = false;
     private string filtro = string.Empty;
+    private List<UsuarioDTO> todosLosUsuarios = new(); //Lista para filtar
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
+            todosLosUsuarios = await UsuarioService.ObtenerUsuariosAsync();
             usuarios = await UsuarioService.ObtenerUsuariosAsync();
             roles = await UsuarioService.ObtenerRolesAsync();
         }
@@ -151,9 +151,24 @@
         await VerificaodorSesion();
     }
 
-    private async Task BuscarUsuarios()
+    private void BuscarUsuarios()
     {
-        usuarios = await UsuarioService.BuscarUsuariosAsync(filtro);
+        if (string.IsNullOrWhiteSpace(filtro))
+    {
+        usuarios = new List<UsuarioDTO>(todosLosUsuarios);
+    }
+    else
+    {
+        string texto = filtro.Trim().ToLower();
+        usuarios = todosLosUsuarios
+            .Where(u =>
+            (u.Nombre?.ToLower().Contains(texto) ?? false)
+            || (u.Apellido?.ToLower().Contains(texto) ?? false)
+            || (u.Correo?.ToLower().Contains(texto) ?? false)
+            || u.Id.ToString().Contains(texto)
+            )
+            .ToList();
+        }
     }
 
     private void AbrirModalNuevo()
@@ -196,12 +211,6 @@
         await UsuarioService.CambiarEstadoAsync(u.Id, !u.EstadoCuenta);
         usuarios = await UsuarioService.ObtenerUsuariosAsync();
     }
-    /* por revisar
-    private async Task EliminarUsuario(int id)
-    {
-        await UsuarioService.EliminarUsuarioAsync(id);
-        usuarios = await UsuarioService.ObtenerUsuariosAsync();
-    }*/
 
     //VERIFICAR SEASION
     private bool sesionVerificada = true;

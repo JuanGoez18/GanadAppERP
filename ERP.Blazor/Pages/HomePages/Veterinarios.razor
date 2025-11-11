@@ -25,7 +25,7 @@ else
             <p class="main-descriptions">Administra los veterinarios registrados en el sistema ERP.</p>
 
             <div class="search-bar">
-                <input type="text" placeholder="Buscar veterinario..." @bind="filtro" />
+                <input type="text" placeholder="Buscar veterinario..."  @bind="filtro" @bind:event="oninput" />
                 <button class="btn btn-secondary" @onclick="BuscarVeterinarios">Buscar</button>
                 <button class="btn btn-primary" @onclick="AbrirModalNuevo">+ Nuevo Veterinario</button>
             </div>
@@ -78,6 +78,9 @@ else
                 </tbody>
             </table>
         </div>
+        <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path d="M0,160 C480,240 960,80 1440,160 L1440,320 L0,320 Z"></path>
+        </svg>
     </div>
 }
 
@@ -135,6 +138,7 @@ else
     private bool sesionVerificada = true;
     private bool cargando = true;
     private string mensajeError = string.Empty;
+    private List<VeterinarioDTO> todosLosvaterinarios = new(); //Lista para filtar
 
     protected override async Task OnInitializedAsync()
     {
@@ -159,13 +163,12 @@ else
         try
         {
             cargando = true;
-            veterinarios = await VeterinariosService.ObtenerVeterinariosAsync();
-            veterinarios = veterinarios.Where(x => x.Estado).ToList();
+            todosLosvaterinarios = await VeterinariosService.ObtenerVeterinariosAsync();
+            veterinarios = todosLosvaterinarios.Where(x => x.Estado).ToList();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error cargando veterinarios: {ex.Message}");
-            veterinarios = new List<VeterinarioDTO>();
         }
         finally
         {
@@ -173,31 +176,26 @@ else
         }
     }
 
-    private async Task BuscarVeterinarios()
+    private void BuscarVeterinarios()
     {
-        try
         {
-            cargando = true;
-            var lista = await VeterinariosService.ObtenerVeterinariosAsync();
-
-            if (!string.IsNullOrWhiteSpace(filtro))
-                veterinarios = lista.Where(v => v.Nombre.Contains(filtro, StringComparison.OrdinalIgnoreCase)
-                    || v.Apellido.Contains(filtro, StringComparison.OrdinalIgnoreCase)
-                    || v.Entidad.Contains(filtro, StringComparison.OrdinalIgnoreCase)).ToList();
-            else
-                veterinarios = lista;
-
-            veterinarios = veterinarios.Where(x => x.Estado).ToList();
-        }
-        catch (Exception ex)
+        if (string.IsNullOrWhiteSpace(filtro))
         {
-            Console.WriteLine($"Error buscando veterinarios: {ex.Message}");
-            veterinarios = new List<VeterinarioDTO>();
+            veterinarios = new List<VeterinarioDTO>(todosLosvaterinarios);
         }
-        finally
+        else
         {
-            cargando = false;
+            var texto = filtro.Trim().ToLower();
+            veterinarios = todosLosvaterinarios
+                .Where(v =>
+                (v.Nombre?.ToLower().Contains(texto) ?? false)
+                || (v.Apellido?.ToLower().Contains(texto) ?? false)
+                || (v.CC?.ToLower().Contains(texto) ?? false)
+                || v.IdVeterinarios.ToString().Contains(texto)
+                )
+                .ToList();
         }
+    }
     }
 
     private void AbrirModalNuevo()

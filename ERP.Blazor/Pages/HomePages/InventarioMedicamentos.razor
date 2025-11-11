@@ -26,7 +26,7 @@ else
             <p class="main-descriptions">Administra los medicamentos registrados en el sistema ERP.</p>
 
             <div class="search-bar">
-                <input type="text" placeholder="Buscar medicamento..." @bind="filtro" />
+                <input type="text" placeholder="Buscar medicamento..." @bind="filtro" @bind:event="oninput" />
                 <button class="btn btn-secondary" @onclick="BuscarMedicamentos">Buscar</button>
                 <button class="btn btn-primary" @onclick="AbrirModalNuevo">+ Nuevo Medicamento</button>
             </div>
@@ -54,7 +54,7 @@ else
                     }
                     else
                     {
-                        @foreach (var m in medicamentos.Where(x => x.Estado)) 
+                        @foreach (var m in medicamentos)
                         {
                             <tr>
                                 <td>@m.Id</td>
@@ -75,6 +75,9 @@ else
                 </tbody>
             </table>
         </div>
+        <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path d="M0,160 C480,240 960,80 1440,160 L1440,320 L0,320 Z"></path>
+        </svg>
     </div>
 }
 
@@ -129,6 +132,7 @@ else
     private string filtro = string.Empty;
     private bool sesionVerificada = true;
     private bool cargando = true;
+    private List<MedicamentoDTO> todosLosmedicamentos = new(); //Lista para filtar
 
     private string mensajeError = string.Empty;
 
@@ -167,14 +171,13 @@ else
         try
         {
             cargando = true;
-            medicamentos = await MedicamentoService.ObtenerMedicamentosAsync();
-            // Si el servicio trae ya solo los activos, este Where es redundante pero seguro:
-            medicamentos = medicamentos.Where(x => x.Estado).ToList();
+            todosLosmedicamentos = await MedicamentoService.ObtenerMedicamentosAsync();
+            medicamentos = todosLosmedicamentos.Where(x => x.Estado).ToList();
+            BuscarMedicamentos();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error cargando medicamentos: {ex.Message}");
-            medicamentos = new List<MedicamentoDTO>();
         }
         finally
         {
@@ -182,26 +185,22 @@ else
         }
     }
 
-    private async Task BuscarMedicamentos()
+    private void BuscarMedicamentos()
     {
-        try
+        if (string.IsNullOrWhiteSpace(filtro))
         {
-            cargando = true;
-            if (string.IsNullOrWhiteSpace(filtro))
-                medicamentos = await MedicamentoService.ObtenerMedicamentosAsync();
-            else
-                medicamentos = await MedicamentoService.BuscarMedicamentosAsync(filtro);
-
-            medicamentos = medicamentos.Where(x => x.Estado).ToList();
+            medicamentos = new List<MedicamentoDTO>(todosLosmedicamentos);
         }
-        catch (Exception ex)
+        else
         {
-            Console.WriteLine($"Error buscando: {ex.Message}");
-            medicamentos = new List<MedicamentoDTO>();
-        }
-        finally
-        {
-            cargando = false;
+            var texto = filtro.Trim().ToLower();
+            medicamentos = todosLosmedicamentos
+                .Where(m =>
+                (m.Nombre?.ToLower().Contains(texto) ?? false)
+                || (m.Tipo?.ToLower().Contains(texto) ?? false)
+                || m.Id.ToString().Contains(texto)
+                )
+                .ToList();
         }
     }
 
