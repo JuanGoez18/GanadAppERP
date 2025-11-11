@@ -1,6 +1,7 @@
 @page "/inventario-medicamentos"
 @layout MainLayout
 @using ERP.Blazor.Models
+@using static System.Runtime.InteropServices.JavaScript.JSType
 @inject ERP.Blazor.Services.MedicamentosService MedicamentoService
 @inject ERP.Blazor.Services.SesionService SesionService
 @inject NavigationManager Nav
@@ -82,21 +83,20 @@ else
     <div class="modal-generico-over">
         <div class="modal-generico">
             <h3>@(medicamentoEditando == null ? "Nuevo Medicamento" : "Editar Medicamento")</h3>
+            
+             @if (!string.IsNullOrEmpty(mensajeError))
+            {
+                <div class="alert alert-danger">@mensajeError</div>
+            }
 
             <div class="modal-generico-body">
                 <label>Nombre</label>
                 <input type="text" class="form-control" @bind="form.Nombre" />
-                 @if (string.IsNullOrWhiteSpace(form.Nombre))
-                {
-                    <small class="text-danger">El nombre es obligatorio.</small>
-                }
+                
 
                 <label>Tipo</label>
                 <input type="text" class="form-control" @bind="form.Tipo" />
-                @if (string.IsNullOrWhiteSpace(form.Tipo))
-                {
-                    <small class="text-danger">El tipo es obligatorio.</small>
-                }
+               
 
                 <label>Fecha Registro</label>
                 <input type="date" class="form-control" @bind="fechaRegistroLocal" />
@@ -109,10 +109,7 @@ else
 
                 <label>ID Proveedor</label>
                 <input type="number" @bind="form.IdProveedor" min="0" />
-                @if (form.IdProveedor == null || form.IdProveedor <= 0)
-                {
-                <small class="text-danger">El ID del proveedor es obligatorio.</small>
-                }
+               
                 
             </div>
 
@@ -132,6 +129,8 @@ else
     private string filtro = string.Empty;
     private bool sesionVerificada = true;
     private bool cargando = true;
+
+    private string mensajeError = string.Empty;
 
     private DateTime fechaRegistroLocal
     {
@@ -212,7 +211,7 @@ else
         form = new MedicamentoDTO
         {
             FechaRegistro = DateTime.Now,
-            FechaCaducidad = DateTime.Now.AddYears(1),
+            FechaCaducidad = DateTime.UtcNow.AddYears(1),
             Stock = 0,
             Estado = true
         };
@@ -237,37 +236,54 @@ else
     }
 
     private async Task GuardarMedicamento()
+{
+    mensajeError = string.Empty;
+
+    
+    if (string.IsNullOrWhiteSpace(form.Nombre) ||
+        string.IsNullOrWhiteSpace(form.Tipo) ||
+        form.FechaRegistro == default ||
+        form.FechaCaducidad == default)
     {
-        // ✅ Validación de campos obligatorios
-        if (string.IsNullOrWhiteSpace(form.Nombre) ||
-            string.IsNullOrWhiteSpace(form.Tipo) ||
-            
-            form.IdProveedor == null || form.IdProveedor <= 0)
-        {
-        Console.WriteLine("Por favor completa todos los campos obligatorios.");
+        mensajeError = "Todos los campos son obligatorios.";
         return;
     }
-        if (string.IsNullOrWhiteSpace(form.Nombre))
-        {
-            Console.WriteLine("Nombre requerido.");
-            return;
-        }
 
-        bool ok;
-        if (medicamentoEditando == null)
-        {
-            ok = await MedicamentoService.CrearMedicamentoAsync(form);
-        }
-        else
-        {
-            ok = await MedicamentoService.ActualizarMedicamentoAsync(form);
-        }
-
-        if (!ok) Console.WriteLine("Error al guardar medicamento");
-
-        mostrarModal = false;
-        await CargarMedicamentosAsync();
+    
+    if (form.FechaCaducidad <= form.FechaRegistro)
+    {
+        mensajeError = "La fecha de caducidad debe ser posterior a la fecha de registro.";
+        return;
     }
+
+    
+    if (form.Stock <= 0 || form.IdProveedor == null || form.IdProveedor <= 0)
+    {
+        mensajeError = "El stock y el proveedor deben ser mayores a 0.";
+        return;
+    }
+
+    bool ok = false;
+
+    if (medicamentoEditando == null)
+    {
+        ok = await MedicamentoService.CrearMedicamentoAsync(form);
+    }
+    else
+    {
+        ok = await MedicamentoService.ActualizarMedicamentoAsync(form);
+    }
+
+    if (!ok)
+    {
+        mensajeError = "Error al guardar medicamento. Revisa los datos.";
+        return;
+    }
+
+    mostrarModal = false;
+    await CargarMedicamentosAsync();
+}
+
 
     private async Task ConfirmEliminar(int id)
     {
