@@ -1,6 +1,7 @@
 using Microsoft.JSInterop;
 using System.Text.Json;
 using System.Threading.Tasks;
+using ERP.Blazor.Models;
 
 namespace ERP.Blazor.Services
 {
@@ -16,8 +17,31 @@ namespace ERP.Blazor.Services
         // Guarda datos de sesión en localStorage
         public async Task GuardarSesionAsync(object datos)
         {
-            string json = JsonSerializer.Serialize(datos);
-            await _js.InvokeVoidAsync("localStorage.setItem", "usuarioSesion", json);
+            try
+            {
+                string json = JsonSerializer.Serialize(datos);
+                using var doc = JsonDocument.Parse(json);
+
+                if (doc.RootElement.TryGetProperty("usuario", out var usuario))
+                {
+                    string usuarioJson = usuario.GetRawText();
+                    await _js.InvokeVoidAsync("localStorage.setItem", "usuarioSesion", usuarioJson);
+                }
+                else
+                {
+                    await _js.InvokeVoidAsync("localStorage.setItem", "usuarioSesion", json);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error guardando sesión: {ex.Message}");
+            }
+        }
+
+        // Guarda directamente un JSON de usuario sin procesar
+        public async Task GuardarSesionRawAsync(string usuarioJson)
+        {
+            await _js.InvokeVoidAsync("localStorage.setItem", "usuarioSesion", usuarioJson);
         }
 
         // Obtiene los datos de sesión
@@ -27,13 +51,10 @@ namespace ERP.Blazor.Services
             if (string.IsNullOrEmpty(json))
                 return default;
 
-            return JsonSerializer.Deserialize<T>(json);
-        }
-
-        // Elimina la sesión
-        public async Task CerrarSesionAsync()
-        {
-            await _js.InvokeVoidAsync("localStorage.removeItem", "usuarioSesion");
+            return JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
         }
 
         // Verifica si hay sesión activa
@@ -41,6 +62,34 @@ namespace ERP.Blazor.Services
         {
             var json = await _js.InvokeAsync<string>("localStorage.getItem", "usuarioSesion");
             return !string.IsNullOrEmpty(json);
+        }
+
+        // Cierra la sesión
+        public async Task CerrarSesionAsync()
+        {
+            await _js.InvokeVoidAsync("localStorage.removeItem", "usuarioSesion");
+        }
+
+        // ✅ Nuevo: Obtener el rol del usuario autenticado
+        public async Task<string> ObtenerRolUsuarioAsync()
+        {
+            var usuario = await ObtenerSesionAsync<UsuarioDTO>();
+            return usuario?.RolNombre ?? string.Empty;
+        }
+
+        // ✅ Nuevo: Obtener el ID del usuario autenticado
+        public async Task<int> ObtenerIdUsuarioAsync()
+        {
+            var usuario = await ObtenerSesionAsync<UsuarioDTO>();
+            return usuario?.Id_Usuarios ?? 0;
+        }
+
+        // ✅ Opcional: Obtener nombre completo del usuario
+        public async Task<string> ObtenerNombreCompletoAsync()
+        {
+            var usuario = await ObtenerSesionAsync<UsuarioDTO>();
+            if (usuario == null) return string.Empty;
+            return $"{usuario.Nombre} {usuario.Apellido}".Trim();
         }
     }
 }

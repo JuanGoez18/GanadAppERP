@@ -41,6 +41,10 @@
       "PackagePath": "staticwebassets\\index.html"
     },
     {
+      "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
       "Id": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\sample-data\\weather.json",
       "PackagePath": "staticwebassets\\sample-data\\weather.json"
     },

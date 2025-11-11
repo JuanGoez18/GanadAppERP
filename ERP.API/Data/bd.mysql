@@ -1,0 +1,92 @@
+-- ==================================================
+-- TABLA: roles
+-- ==================================================
+CREATE TABLE roles (
+    id_rol INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_rol VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- Insertar roles base
+INSERT INTO roles (nombre_rol) VALUES
+('Administrador'),
+('Miembro');
+
+-- ==================================================
+-- TABLA: miembros (usuarios de la biblioteca)
+-- ==================================================
+CREATE TABLE miembros (
+    id_miembro INT AUTO_INCREMENT PRIMARY KEY,
+    id_rol INT NOT NULL,
+    nombre_completo VARCHAR(100) NOT NULL,
+    documento VARCHAR(20) NOT NULL UNIQUE,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    contrasena VARCHAR(255) NOT NULL,
+    telefono VARCHAR(20),
+    direccion VARCHAR(150),
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tipo_miembro ENUM('estudiante', 'profesor', 'externo') DEFAULT 'estudiante',
+    estado BOOLEAN DEFAULT TRUE, -- TRUE=activo, FALSE=inactivo
+    archivo BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (id_rol) REFERENCES roles(id_rol)
+);
+
+-- ==================================================
+-- TABLA: libros
+-- ==================================================
+CREATE TABLE libros (
+    id_libro INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(150) NOT NULL,
+    autor VARCHAR(100) NOT NULL,
+    editorial VARCHAR(100),
+    categoria VARCHAR(50),
+    anio_publicacion YEAR,
+    descripcion VARCHAR(255),
+    stock INT DEFAULT 1,
+    ubicacion VARCHAR(100),
+    estado ENUM('disponible', 'prestado', 'reservado', 'no disponible') DEFAULT 'disponible',
+    archivo BOOLEAN DEFAULT TRUE
+);
+
+-- ==================================================
+-- TABLA: préstamos
+-- ==================================================
+CREATE TABLE prestamos (
+    id_prestamo INT AUTO_INCREMENT PRIMARY KEY,
+    id_miembro INT NOT NULL,  -- quien pide el préstamo
+    id_admin INT NOT NULL,    -- quien lo registra (administrador)
+    fecha_prestamo DATE NOT NULL,
+    fecha_devolucion DATE,
+    dias_prestamo INT DEFAULT 7,
+    estado ENUM('activo', 'devuelto', 'vencido') DEFAULT 'activo',
+    observaciones VARCHAR(255),
+    archivo BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (id_miembro) REFERENCES miembros(id_miembro),
+    FOREIGN KEY (id_admin) REFERENCES miembros(id_miembro)
+);
+
+-- ==================================================
+-- TABLA: detalle_prestamo
+-- (permite varios libros por préstamo)
+-- ==================================================
+CREATE TABLE detalle_prestamo (
+    id_detalle INT AUTO_INCREMENT PRIMARY KEY,
+    id_prestamo INT NOT NULL,
+    id_libro INT NOT NULL,
+    cantidad INT DEFAULT 1,
+    archivo BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (id_prestamo) REFERENCES prestamos(id_prestamo),
+    FOREIGN KEY (id_libro) REFERENCES libros(id_libro)
+);
+
+-- ==================================================
+-- TABLA: devoluciones
+-- ==================================================
+CREATE TABLE devoluciones (
+    id_devolucion INT AUTO_INCREMENT PRIMARY KEY,
+    id_prestamo INT NOT NULL,
+    fecha_devolucion DATE NOT NULL,
+    multa DECIMAL(10,2) DEFAULT 0.00,
+    observacion VARCHAR(255),
+    archivo BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (id_prestamo) REFERENCES prestamos(id_prestamo)
+);

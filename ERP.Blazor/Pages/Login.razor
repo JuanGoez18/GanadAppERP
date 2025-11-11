@@ -89,12 +89,17 @@
 
             if (response.IsSuccessStatusCode)
             {
-                // 🔹 Leer datos de usuario devueltos por la API
-                var userJson = await response.Content.ReadAsStringAsync();
-                var userData = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(userJson);
+                 // 🔹 Leer el JSON completo
+            var json = await response.Content.ReadAsStringAsync();
 
-                // 🔹 Guardar en localStorage
-                await SesionService.GuardarSesionAsync(userData);
+            // 🔹 Extraer solo el objeto interno "usuario"
+            using var doc = System.Text.Json.JsonDocument.Parse(json);
+            if (doc.RootElement.TryGetProperty("usuario", out var usuarioElement))
+            {
+                var usuarioJson = usuarioElement.GetRawText();
+                await SesionService.GuardarSesionRawAsync(usuarioJson); // guarda solo el usuario
+            }
+                
                 MostrarNotificacion("Correcto: Iniciando sesion", "success");
                 await Task.Delay(3000);
                 Nav.NavigateTo("/home");

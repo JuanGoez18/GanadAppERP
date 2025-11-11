@@ -1,0 +1,304 @@
+@page "/inventario-medicamentos"
+@layout MainLayout
+@using ERP.Blazor.Models
+@using static System.Runtime.InteropServices.JavaScript.JSType
+@inject ERP.Blazor.Services.MedicamentosService MedicamentoService
+@inject ERP.Blazor.Services.SesionService SesionService
+@inject NavigationManager Nav
+
+<PageTitle>Inventario Medicamentos</PageTitle>
+
+@if (!sesionVerificada)
+{
+    <div class="modal-nosesion">
+        <div class="nosesion-container">
+            <h2>Sesión no activa</h2>
+            <p>Debes iniciar sesión primero.</p>
+            <button class="btn-modal" @onclick="VolverABienvenida">Volver</button>
+        </div>
+    </div>
+}
+else
+{
+    <div class="auth-container2">
+        <div class="auth-card2">
+            <h1 class="main-titles">Inventario de Medicamentos</h1>
+            <p class="main-descriptions">Administra los medicamentos registrados en el sistema ERP.</p>
+
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar medicamento..." @bind="filtro" @bind:event="oninput" />
+                <button class="btn btn-secondary" @onclick="BuscarMedicamentos">Buscar</button>
+                <button class="btn btn-primary" @onclick="AbrirModalNuevo">+ Nuevo Medicamento</button>
+            </div>
+
+            <table class="usuarios-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Registro</th>
+                        <th>Caducidad</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (cargando)
+                    {
+                        <tr><td colspan="7" class="text-center">Cargando medicamentos...</td></tr>
+                    }
+                    else if (medicamentos == null || medicamentos.Count == 0)
+                    {
+                        <tr><td colspan="7" class="text-center">No se encontraron medicamentos.</td></tr>
+                    }
+                    else
+                    {
+                        @foreach (var m in medicamentos)
+                        {
+                            <tr>
+                                <td>@m.Id</td>
+                                <td>@m.Nombre</td>
+                                <td>@m.Tipo</td>
+                                <td>@m.FechaRegistro.ToString("yyyy-MM-dd")</td>
+                                <td>@m.FechaCaducidad.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    <span class="@($"stock {GetStockColor(m.Stock)}")">@m.Stock</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-info" @onclick="() => EditarMedicamento(m)">Editar</button>
+                                    <button class="btn btn-sm btn-danger" @onclick="() => ConfirmEliminar(m.Id)">Eliminar</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path d="M0,160 C480,240 960,80 1440,160 L1440,320 L0,320 Z"></path>
+        </svg>
+    </div>
+}
+
+@if (mostrarModal)
+{
+    <div class="modal-generico-over">
+        <div class="modal-generico">
+            <h3>@(medicamentoEditando == null ? "Nuevo Medicamento" : "Editar Medicamento")</h3>
+            
+             @if (!string.IsNullOrEmpty(mensajeError))
+            {
+                <div class="alert alert-danger">@mensajeError</div>
+            }
+
+            <div class="modal-generico-body">
+                <label>Nombre</label>
+                <input type="text" class="form-control" @bind="form.Nombre" />
+                
+
+                <label>Tipo</label>
+                <input type="text" class="form-control" @bind="form.Tipo" />
+               
+
+                <label>Fecha Registro</label>
+                <input type="date" class="form-control" @bind="fechaRegistroLocal" />
+
+                <label>Fecha Caducidad</label>
+                <input type="date" class="form-control" @bind="fechaCaducidadLocal" />
+
+                <label>Stock</label>
+                <input type="number" class="form-control" @bind="form.Stock" min="0" />
+
+                <label>ID Proveedor</label>
+                <input type="number" @bind="form.IdProveedor" min="0" />
+               
+                
+            </div>
+
+            <div class="modal-generico-footer">
+                <button class="btn btn-secondary" @onclick="CerrarModal">Cancelar</button>
+                <button class="btn btn-success" @onclick="GuardarMedicamento">Guardar</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<MedicamentoDTO> medicamentos = new();
+    private MedicamentoDTO form = new MedicamentoDTO();
+    private MedicamentoDTO? medicamentoEditando;
+    private bool mostrarModal = false;
+    private string filtro = string.Empty;
+    private bool sesionVerificada = true;
+    private bool cargando = true;
+    private List<MedicamentoDTO> todosLosmedicamentos = new(); //Lista para filtar
+
+    private string mensajeError = string.Empty;
+
+    private DateTime fechaRegistroLocal
+    {
+        get => form.FechaRegistro.ToLocalTime();       // Muestra en input en hora local
+        set => form.FechaRegistro = value.ToUniversalTime(); // Convierte a UTC al guardar
+    }
+
+    private DateTime fechaCaducidadLocal
+    {
+        get => form.FechaCaducidad.ToLocalTime();      
+        set => form.FechaCaducidad = value.ToUniversalTime();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await VerificarSesionAsync();
+        await CargarMedicamentosAsync();
+    }
+
+    private async Task VerificarSesionAsync()
+    {
+        try
+        {
+            sesionVerificada = await SesionService.HaySesionAsync();
+        }
+        catch
+        {
+            sesionVerificada = false;
+        }
+    }
+
+    private async Task CargarMedicamentosAsync()
+    {
+        try
+        {
+            cargando = true;
+            todosLosmedicamentos = await MedicamentoService.ObtenerMedicamentosAsync();
+            medicamentos = todosLosmedicamentos.Where(x => x.Estado).ToList();
+            BuscarMedicamentos();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error cargando medicamentos: {ex.Message}");
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private void BuscarMedicamentos()
+    {
+        if (string.IsNullOrWhiteSpace(filtro))
+        {
+            medicamentos = new List<MedicamentoDTO>(todosLosmedicamentos);
+        }
+        else
+        {
+            var texto = filtro.Trim().ToLower();
+            medicamentos = todosLosmedicamentos
+                .Where(m =>
+                (m.Nombre?.ToLower().Contains(texto) ?? false)
+                || (m.Tipo?.ToLower().Contains(texto) ?? false)
+                || m.Id.ToString().Contains(texto)
+                )
+                .ToList();
+        }
+    }
+
+    private void AbrirModalNuevo()
+    {
+        medicamentoEditando = null;
+        form = new MedicamentoDTO
+        {
+            FechaRegistro = DateTime.Now,
+            FechaCaducidad = DateTime.UtcNow.AddYears(1),
+            Stock = 0,
+            Estado = true
+        };
+        mostrarModal = true;
+    }
+
+    private void EditarMedicamento(MedicamentoDTO m)
+    {
+        medicamentoEditando = m;
+        form = new MedicamentoDTO
+        {
+            Id = m.Id,
+            Nombre = m.Nombre,
+            Tipo = m.Tipo,
+            FechaRegistro = m.FechaRegistro == default ? DateTime.Now : m.FechaRegistro,
+            FechaCaducidad = m.FechaCaducidad == default ? DateTime.Now.AddYears(1) : m.FechaCaducidad,
+            Stock = m.Stock,
+            IdProveedor = m.IdProveedor,
+            Estado = m.Estado
+        };
+        mostrarModal = true;
+    }
+
+    private async Task GuardarMedicamento()
+{
+    mensajeError = string.Empty;
+
+    
+    if (string.IsNullOrWhiteSpace(form.Nombre) ||
+        string.IsNullOrWhiteSpace(form.Tipo) ||
+        form.FechaRegistro == default ||
+        form.FechaCaducidad == default)
+    {
+        mensajeError = "Todos los campos son obligatorios.";
+        return;
+    }
+
+    
+    if (form.FechaCaducidad <= form.FechaRegistro)
+    {
+        mensajeError = "La fecha de caducidad debe ser posterior a la fecha de registro.";
+        return;
+    }
+
+    
+    if (form.Stock <= 0 || form.IdProveedor == null || form.IdProveedor <= 0)
+    {
+        mensajeError = "El stock y el proveedor deben ser mayores a 0.";
+        return;
+    }
+
+    bool ok = false;
+
+    if (medicamentoEditando == null)
+    {
+        ok = await MedicamentoService.CrearMedicamentoAsync(form);
+    }
+    else
+    {
+        ok = await MedicamentoService.ActualizarMedicamentoAsync(form);
+    }
+
+    if (!ok)
+    {
+        mensajeError = "Error al guardar medicamento. Revisa los datos.";
+        return;
+    }
+
+    mostrarModal = false;
+    await CargarMedicamentosAsync();
+}
+
+
+    private async Task ConfirmEliminar(int id)
+    {
+        var ok = await MedicamentoService.CambiarEstadoMedicamentoAsync(id, false);
+        if (!ok) Console.WriteLine("Error al desactivar medicamento");
+        await CargarMedicamentosAsync();
+    }
+
+    private string GetStockColor(int stock)
+    {
+        if (stock < 4) return "rojo";
+        if (stock < 10) return "amarillo";
+        return "verde";
+    }
+
+    private void CerrarModal() => mostrarModal = false;
+
+    private void VolverABienvenida() => Nav.NavigateTo("/", forceLoad: true);
+}
