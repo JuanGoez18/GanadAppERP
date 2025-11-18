@@ -1,0 +1,369 @@
+@page "/marketplace"
+@layout ERP.Blazor.Shared.EmptyLayout
+@inject ERP.Blazor.Services.SesionService SesionService
+
+<PageTitle>Marketplace de Ganado</PageTitle>
+
+<div class="all-container">
+
+    <!-- HEADER -->
+    <header class="welcome-header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h1 class="logo" @onclick="IrABienvenida">GanadApp</h1>
+
+            <nav>
+                @if (!sesionActiva)
+                {
+                    <a href="/registro" class="btn-header">Registro</a>
+                    <a href="/login" class="btn-header btn-outline">Iniciar Sesión</a>
+                }
+                else
+                {
+                    <button class="btn-header btn-outline logohouse" @onclick="IrABienvenida">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-file-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M4 0h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2"/>
+                        </svg>
+                    </button>
+
+                    <button class="btn-header btn-outline logohouse" @onclick="IrAHome">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+                            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+                        </svg>
+                    </button>
+                }
+            </nav>
+        </div>
+    </header>
+
+    <!-- BANNER -->
+    <section class="marketplace-hero">
+        <h2>Marketplace de Ganado</h2>
+        <p>Encuentra y adquiere ganado de calidad certificada</p>
+
+        <!-- Carrito: el componente que ya creaste -->
+        <div class="CarritoCompras" role="button" @onclick="ToggleSidebar" title="Ver carrito">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+                <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
+            </svg>
+
+            @if (CartCount > 0)
+            {
+                <span class="cart-dot"></span>
+                <span class="cart-badge">@CartCount</span>
+            }
+        </div>
+    </section>
+
+    <!-- BARRA DE BUSQUEDA Y FILTROS -->
+    <div class="container filtros-box">
+        <div class="row g-3 align-items-center">
+
+            <div class="col-md-5">
+                <input class="form-control buscador" placeholder="Buscar por raza, ubicación..." />
+            </div>
+
+            <div class="col-md-2">
+                <select class="form-control select-market">
+                    <option>Raza</option>
+                    <option>Brahman</option>
+                    <option>Holstein</option>
+                    <option>Angus</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <select class="form-control select-market">
+                    <option>Ordenar por</option>
+                    <option>Precio (menor)</option>
+                    <option>Precio (mayor)</option>
+                    <option>Peso</option>
+                    <option>Edad</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <button class="btn btn-outline-secondary w-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
+                        <path d="M1.5 1.5a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 .5.5v2.528a.5.5 0 0 1-.146.354L10 8.207V13.5a.5.5 0 0 1-.276.447l-3 1.5A.5.5 0 0 1 6 15V8.207L1.646 4.382A.5.5 0 0 1 1.5 4.028z"/>
+                    </svg>
+                    &nbsp;Filtros avanzados
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- LISTA DE PRODUCTOS -->
+    <div class="container marketplace-container mt-4">
+        <div class="row">
+
+            @foreach (var item in listaGanadoDemo)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="ganado-card">
+
+                        <!-- BADGES -->
+                        <div class="card-badges">
+                            <span class="badge-certificado">✓ Certificado</span>
+                            <span class="badge-disponible">Disponible</span>
+                        </div>
+
+                        <img src="@item.Imagen" class="card-img-top ganado-img" />
+
+                        <div class="card-body">
+                            <h5 class="ganado-title">@item.Nombre</h5>
+
+                            <p class="ganado-location">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
+                                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                                </svg>
+                                @item.Ubicacion
+                            </p>
+
+                            <div class="ganado-info">
+                                <span><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+                                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                            </svg> Edad: @item.Edad años</span>
+                                <span><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-arrows-vertical" viewBox="0 0 16 16">
+                                <path d="M8.354 14.854a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 13.293V2.707L6.354 3.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 2.707v10.586l1.146-1.147a.5.5 0 0 1 .708.708z"/>
+                            </svg> Peso: @item.Peso kg</span>
+                            </div>
+
+                            <span class="badge-raza">@item.Raza</span>
+
+                            <p class="ganado-price">$@item.Precio</p>
+
+                            <button class="btn-agregarcarro"  @onclick="() => AgregarAlCarrito(item)" disabled="@(item.Disponible ? null : true)">Agregar al carrito</button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+    <!-- SIDEBAR DEL CARRITO (sale por la derecha) -->
+    <div class="carrito-sidebar @(sidebarOpen ? "open" : "")" @onclick:stopPropagation>
+        <div class="sidebar-header">
+            <button class="close-btn" @onclick="ToggleSidebar"><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/></svg>
+            </button>
+            <h4>Tu carrito (@CartCount)</h4>
+        </div>
+
+        <div class="sidebar-body">
+            @if (!cartItems.Any())
+            {
+                <p class="text-muted">No hay productos en el carrito.</p>
+            }
+            else
+            {
+                <ul class="cart-list">
+                    @foreach (var it in cartItems)
+                    {
+                        <li class="cart-row">
+                            <div class="left">
+                                <strong>@it.Nombre</strong>
+                                <div class="small">Precio: @String.Format("{0:N0}", it.Precio)</div>
+                                <div class="small">Stock: @it.StockDisponible</div>
+                            </div>
+                            <div class="right">
+                                <input type="number" min="1" max="@it.StockDisponible" value="@it.Cantidad"
+                                    @onchange="(e) => CambiarCantidad(it.GanadoId, ParseInt(e.Value))" />
+                                <button class="btn-link" @onclick="() => RemoverDelCarrito(it.GanadoId)">Eliminar</button>
+                            </div>
+                        </li>
+                    }
+                </ul>
+
+                <div class="cart-footer">
+                    <div>Total: <strong>@String.Format("{0:N0}", TotalCarrito())</strong></div>
+                    <button class="btn btn-success w-100" @onclick="ProcesarCompra">Comprar</button>
+                </div>
+            }
+        </div>
+    </div>
+
+
+
+</div>
+
+@code {
+
+    private bool sesionActiva = false;
+    // --- carrito en memoria (local en la página) ---
+    private List<CartItem> cartItems = new();
+    private bool sidebarOpen = false;
+
+    private List<GanadoVentaDemo> listaGanadoDemo = new()
+    {
+        new GanadoVentaDemo { GanadoId = 1, Nombre="Toro Brahman Premium", Raza="Brahman", Edad=3, Peso=850, Precio=12500000, Ubicacion="Córdoba, Colombia", Imagen="/images/ganad1.jpg" },
+        new GanadoVentaDemo { GanadoId = 2, Nombre="Vaca Holstein Lechera", Raza="Holstein", Edad=4, Peso=620, Precio=8200000, Ubicacion="Antioquia, Colombia", Imagen="/images/ganad1.jpg" },
+        new GanadoVentaDemo { GanadoId = 3, Nombre="Novillo Angus Negro", Raza="Angus", Edad=2, Peso=480, Precio=6800000, Ubicacion="Cundinamarca, Colombia", Imagen="/images/ganad1.jpg" }
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        sesionActiva = await SesionService.HaySesionAsync();
+    }
+
+    private void IrAHome() => Navigation.NavigateTo("/home");
+    private void IrABienvenida() => Navigation.NavigateTo("/");
+
+    private int CartCount => cartItems.Sum(x => x.Cantidad);
+
+    private void ToggleSidebar()
+    {
+        sidebarOpen = !sidebarOpen;
+    }
+
+     private void AgregarAlCarrito(GanadoVentaDemo g)
+    {
+        if (!g.Disponible)
+        {
+            ShowToast("Producto no disponible");
+            return;
+        }
+        if (g.Stock <= 0)
+        {
+            ShowToast("Sin stock disponible");
+            return;
+        }
+
+        var existing = cartItems.FirstOrDefault(x => x.GanadoId == g.GanadoId);
+        if (existing == null)
+        {
+            cartItems.Add(new CartItem
+            {
+                GanadoId = g.GanadoId,
+                Nombre = g.Nombre,
+                Precio = g.Precio,
+                Cantidad = 1,
+                StockDisponible = g.Stock
+            });
+        }
+        else
+        {
+            if (existing.Cantidad + 1 > existing.StockDisponible)
+            {
+                ShowToast("No hay stock suficiente");
+                return;
+            }
+            existing.Cantidad += 1;
+        }
+
+        ShowToast($"{g.Nombre} agregado al carrito");
+        sidebarOpen = true; // abre panel automáticamente
+    }
+
+    private void RemoverDelCarrito(int ganadoId)
+    {
+        var it = cartItems.FirstOrDefault(x => x.GanadoId == ganadoId);
+        if (it != null) cartItems.Remove(it);
+    }
+
+    private void CambiarCantidad(int ganadoId, int nuevaCantidad)
+    {
+        var it = cartItems.FirstOrDefault(x => x.GanadoId == ganadoId);
+        if (it == null) return;
+
+        if (nuevaCantidad <= 0)
+        {
+            cartItems.Remove(it);
+            return;
+        }
+
+        if (nuevaCantidad > it.StockDisponible)
+        {
+            ShowToast("Cantidad excede stock disponible");
+            return;
+        }
+
+        it.Cantidad = nuevaCantidad;
+    }
+
+    private decimal TotalCarrito() => cartItems.Sum(x => x.Precio * x.Cantidad);
+
+    private async Task ProcesarCompra()
+    {
+        // Por ahora solo limpiamos y simulamos (aquí integrarás VentaService más adelante)
+        if (!cartItems.Any())
+        {
+            ShowToast("No hay productos en el carrito");
+            return;
+        }
+
+        // validar stock local
+        foreach (var it in cartItems)
+        {
+            var g = listaGanadoDemo.FirstOrDefault(x => x.GanadoId == it.GanadoId);
+            if (g == null || g.Stock < it.Cantidad)
+            {
+                ShowToast($"Stock insuficiente para {it.Nombre}");
+                return;
+            }
+        }
+
+        // simula reducir stock
+        foreach (var it in cartItems)
+        {
+            var g = listaGanadoDemo.FirstOrDefault(x => x.GanadoId == it.GanadoId);
+            if (g != null)
+            {
+                g.Stock -= it.Cantidad;
+                if (g.Stock <= 0) g.Disponible = false;
+            }
+        }
+
+        cartItems.Clear();
+        sidebarOpen = false;
+        ShowToast("Compra registrada (simulada). Implementa VentaService para guardar en BD.");
+    }
+
+    // simple toast UI (local) 🟥
+    private bool showToast = false;
+    private string toastMessage = "";
+    private async void ShowToast(string msg)
+    {
+        toastMessage = msg;
+        showToast = true;
+        StateHasChanged();
+        await Task.Delay(1500);
+        showToast = false;
+        StateHasChanged();
+    }
+
+    // helper parse safe para el input number
+    private int ParseInt(object? value)
+    {
+        if (value == null) return 1;
+        if (int.TryParse(value.ToString(), out var n)) return n;
+        return 1;
+    }
+
+    [Inject] public NavigationManager Navigation { get; set; } = default!;
+
+    public class GanadoVentaDemo
+{
+    public int GanadoId { get; set; }
+    public string Nombre { get; set; } = "";
+    public string Raza { get; set; } = "";
+    public string Ubicacion { get; set; } = "";
+    public int Edad { get; set; }
+    public int Peso { get; set; }
+    public int Precio { get; set; }
+    public string Imagen { get; set; } = "";
+    public int Stock { get; set; } = 10;
+    public bool Disponible { get; set; } = true;
+}
+
+    public class CartItem
+    {
+        public int GanadoId { get; set; }
+        public string Nombre { get; set; } = "";
+        public decimal Precio { get; set; }
+        public int Cantidad { get; set; } = 1;
+        public int StockDisponible { get; set; } = 1;
+        public bool Disponible { get; set; } = true;
+    }
+}
