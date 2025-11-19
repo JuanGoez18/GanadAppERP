@@ -108,7 +108,8 @@
                             <span class="badge-disponible">Disponible</span>
                         </div>
 
-                        <img src="@item.Imagen" class="card-img-top ganado-img" />
+                        <img src="@(!string.IsNullOrWhiteSpace(item.Imagen) ? item.Imagen : "/images/default-ganado.jpg")"
+                        class="card-img-top ganado-img" />
 
                         <div class="card-body">
                             <h5 class="ganado-title">@item.Raza</h5>
