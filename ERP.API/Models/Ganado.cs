@@ -30,13 +30,24 @@ namespace TuProyecto.Modelos
         [Required(ErrorMessage = "El estado de salud es obligatorio")]
         public string EstadoSalud { get; set; }
 
-        // 🔹 Identifica qué usuario (supervisor) registró este ganado
         [Column("supervisor")]
         [Required(ErrorMessage = "Debe asignarse un supervisor al registro del ganado")]
         public int Supervisor { get; set; }
 
-        // 🔹 Campo para el borrado lógico (activo/inactivo)
         [Column("estado")]
         public bool Estado { get; set; } = true;
+
+        // ¿Está disponible para Marketplace?
+        [Column("para_venta")]
+        public bool ParaVenta { get; set; } = false;
+
+        [Column("stock_venta")]
+        public int StockVenta { get; set; } = 0;
+
+        [Column("precio_unitario")]
+        public decimal PrecioUnitario { get; set; } = 0;
+
+        [Column("imagen")]
+        public string? Imagen { get; set; }
     }
 }

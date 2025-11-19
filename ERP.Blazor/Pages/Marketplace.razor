@@ -97,7 +97,7 @@
     <div class="container marketplace-container mt-4">
         <div class="row">
 
-            @foreach (var item in listaGanadoDemo)
+            @foreach (var item in ganadoLista)
             {
                 <div class="col-md-4 mb-4">
                     <div class="ganado-card">
@@ -111,14 +111,10 @@
                         <img src="@item.Imagen" class="card-img-top ganado-img" />
 
                         <div class="card-body">
-                            <h5 class="ganado-title">@item.Nombre</h5>
+                            <h5 class="ganado-title">@item.Raza</h5>
 
                             <p class="ganado-location">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
-                                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-                                </svg>
-                                @item.Ubicacion
+                                stock: @item.StockVenta
                             </p>
 
                             <div class="ganado-info">
@@ -132,9 +128,13 @@
 
                             <span class="badge-raza">@item.Raza</span>
 
-                            <p class="ganado-price">$@item.Precio</p>
+                            <p class="ganado-price">$@String.Format("{0:N0}", item.PrecioUnitario)</p>
 
-                            <button class="btn-agregarcarro"  @onclick="() => AgregarAlCarrito(item)" disabled="@(item.Disponible ? null : true)">Agregar al carrito</button>
+                            <button class="btn-agregarcarro"  
+                                    @onclick="() => AgregarAlCarrito(item)" 
+                                    disabled="@(item.StockVenta <= 0 ? true : null)">
+                                    Agregar al carrito
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -191,20 +191,20 @@
 @code {
 
     private bool sesionActiva = false;
-    // --- carrito en memoria (local en la página) ---
-    private List<CartItem> cartItems = new();
     private bool sidebarOpen = false;
 
-    private List<GanadoVentaDemo> listaGanadoDemo = new()
-    {
-        new GanadoVentaDemo { GanadoId = 1, Nombre="Toro Brahman Premium", Raza="Brahman", Edad=3, Peso=850, Precio=12500000, Ubicacion="Córdoba, Colombia", Imagen="/images/ganad1.jpg" },
-        new GanadoVentaDemo { GanadoId = 2, Nombre="Vaca Holstein Lechera", Raza="Holstein", Edad=4, Peso=620, Precio=8200000, Ubicacion="Antioquia, Colombia", Imagen="/images/ganad1.jpg" },
-        new GanadoVentaDemo { GanadoId = 3, Nombre="Novillo Angus Negro", Raza="Angus", Edad=2, Peso=480, Precio=6800000, Ubicacion="Cundinamarca, Colombia", Imagen="/images/ganad1.jpg" }
-    };
+    private List<CartItem> cartItems = new();
+
+    [Inject] MarketplaceService MarketplaceService { get; set; }
+    [Inject] public NavigationManager Navigation { get; set; } = default!;
+
+    private List<GanadoMarketplace> ganadoLista = new();
+
 
     protected override async Task OnInitializedAsync()
     {
         sesionActiva = await SesionService.HaySesionAsync();
+        ganadoLista = await MarketplaceService.ObtenerGanadoMarketplace();
     }
 
     private void IrAHome() => Navigation.NavigateTo("/home");
@@ -217,43 +217,35 @@
         sidebarOpen = !sidebarOpen;
     }
 
-     private void AgregarAlCarrito(GanadoVentaDemo g)
+    private void AgregarAlCarrito(GanadoMarketplace g)
     {
-        if (!g.Disponible)
+        if (g.StockVenta <= 0)
         {
-            ShowToast("Producto no disponible");
-            return;
-        }
-        if (g.Stock <= 0)
-        {
-            ShowToast("Sin stock disponible");
             return;
         }
 
-        var existing = cartItems.FirstOrDefault(x => x.GanadoId == g.GanadoId);
+        var existing = cartItems.FirstOrDefault(x => x.GanadoId == g.IdGanado);
         if (existing == null)
         {
             cartItems.Add(new CartItem
             {
-                GanadoId = g.GanadoId,
-                Nombre = g.Nombre,
-                Precio = g.Precio,
+                GanadoId = g.IdGanado,
+                Nombre = g.CodigoArete,
+                Precio = g.PrecioUnitario,
                 Cantidad = 1,
-                StockDisponible = g.Stock
+                StockDisponible = g.StockVenta
             });
         }
         else
         {
             if (existing.Cantidad + 1 > existing.StockDisponible)
             {
-                ShowToast("No hay stock suficiente");
                 return;
             }
             existing.Cantidad += 1;
         }
 
-        ShowToast($"{g.Nombre} agregado al carrito");
-        sidebarOpen = true; // abre panel automáticamente
+        sidebarOpen = true;
     }
 
     private void RemoverDelCarrito(int ganadoId)
@@ -275,7 +267,6 @@
 
         if (nuevaCantidad > it.StockDisponible)
         {
-            ShowToast("Cantidad excede stock disponible");
             return;
         }
 
@@ -284,56 +275,6 @@
 
     private decimal TotalCarrito() => cartItems.Sum(x => x.Precio * x.Cantidad);
 
-    private async Task ProcesarCompra()
-    {
-        // Por ahora solo limpiamos y simulamos (aquí integrarás VentaService más adelante)
-        if (!cartItems.Any())
-        {
-            ShowToast("No hay productos en el carrito");
-            return;
-        }
-
-        // validar stock local
-        foreach (var it in cartItems)
-        {
-            var g = listaGanadoDemo.FirstOrDefault(x => x.GanadoId == it.GanadoId);
-            if (g == null || g.Stock < it.Cantidad)
-            {
-                ShowToast($"Stock insuficiente para {it.Nombre}");
-                return;
-            }
-        }
-
-        // simula reducir stock
-        foreach (var it in cartItems)
-        {
-            var g = listaGanadoDemo.FirstOrDefault(x => x.GanadoId == it.GanadoId);
-            if (g != null)
-            {
-                g.Stock -= it.Cantidad;
-                if (g.Stock <= 0) g.Disponible = false;
-            }
-        }
-
-        cartItems.Clear();
-        sidebarOpen = false;
-        ShowToast("Compra registrada (simulada). Implementa VentaService para guardar en BD.");
-    }
-
-    // simple toast UI (local) 🟥
-    private bool showToast = false;
-    private string toastMessage = "";
-    private async void ShowToast(string msg)
-    {
-        toastMessage = msg;
-        showToast = true;
-        StateHasChanged();
-        await Task.Delay(1500);
-        showToast = false;
-        StateHasChanged();
-    }
-
-    // helper parse safe para el input number
     private int ParseInt(object? value)
     {
         if (value == null) return 1;
@@ -341,29 +282,17 @@
         return 1;
     }
 
-    [Inject] public NavigationManager Navigation { get; set; } = default!;
-
-    public class GanadoVentaDemo
-{
-    public int GanadoId { get; set; }
-    public string Nombre { get; set; } = "";
-    public string Raza { get; set; } = "";
-    public string Ubicacion { get; set; } = "";
-    public int Edad { get; set; }
-    public int Peso { get; set; }
-    public int Precio { get; set; }
-    public string Imagen { get; set; } = "";
-    public int Stock { get; set; } = 10;
-    public bool Disponible { get; set; } = true;
-}
+    private void ProcesarCompra()
+    {
+        Console.WriteLine("comprado");
+    }
 
     public class CartItem
     {
         public int GanadoId { get; set; }
-        public string Nombre { get; set; } = "";
+        public string Nombre { get; set; }
         public decimal Precio { get; set; }
-        public int Cantidad { get; set; } = 1;
-        public int StockDisponible { get; set; } = 1;
-        public bool Disponible { get; set; } = true;
+        public int Cantidad { get; set; }
+        public int StockDisponible { get; set; }
     }
 }

@@ -18,6 +18,7 @@ builder.Services.AddScoped<ProveedoresService>();
 builder.Services.AddScoped<GanadoService>();
 builder.Services.AddScoped<VeterinariosService>();
 builder.Services.AddScoped<NotificacionService>();
+builder.Services.AddScoped<MarketplaceService>();
 
 
 
