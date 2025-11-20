@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using ERP.Blazor.Models;
 
 public class MarketplaceService
 {
@@ -14,5 +15,17 @@ public class MarketplaceService
         return await _http.GetFromJsonAsync<List<GanadoMarketplace>>(
             "api/Marketplace/ganado"
         );
+    }
+
+    public async Task<RespuestaCompra> ProcesarCompraAsync(object request)
+    {
+        var resp = await _http.PostAsJsonAsync("api/marketplace/comprar", request);
+        if (!resp.IsSuccessStatusCode)
+        {
+            return new RespuestaCompra { Exito = false, Mensaje = "Error al procesar la compra." };
+        }
+
+        var data = await resp.Content.ReadFromJsonAsync<RespuestaCompra>();
+        return data ?? new RespuestaCompra { Exito = true };
     }
 }

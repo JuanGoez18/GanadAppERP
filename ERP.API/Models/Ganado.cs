@@ -41,8 +41,8 @@ namespace TuProyecto.Modelos
         [Column("para_venta")]
         public bool ParaVenta { get; set; } = false;
 
-        [Column("stock_venta")]
-        public int StockVenta { get; set; } = 0;
+        [Column("vendido")]
+        public bool Vendido { get; set; } = false;
 
         [Column("precio_unitario")]
         public decimal PrecioUnitario { get; set; } = 0;

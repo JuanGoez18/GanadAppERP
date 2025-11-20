@@ -115,7 +115,7 @@
                             <h5 class="ganado-title">@item.Raza</h5>
 
                             <p class="ganado-location">
-                                stock: @item.StockVenta
+                                codigo: @item.CodigoArete
                             </p>
 
                             <div class="ganado-info">
@@ -131,10 +131,14 @@
 
                             <p class="ganado-price">$@String.Format("{0:N0}", item.PrecioUnitario)</p>
 
-                            <button class="btn-agregarcarro"  
-                                    @onclick="() => AgregarAlCarrito(item)" 
-                                    disabled="@(item.StockVenta <= 0 ? true : null)">
-                                    Agregar al carrito
+                            <button class="btn-agregarcarro"
+                                    @onclick="() => AgregarAlCarrito(item)"
+                                    disabled="@(cartItems.Any(c => c.GanadoId == item.IdGanado))">
+                                @(
+                                    cartItems.Any(c => c.GanadoId == item.IdGanado)
+                                    ? "Agregado"
+                                    : "Agregar al carrito"
+                                )
                             </button>
                         </div>
                     </div>
@@ -166,11 +170,8 @@
                             <div class="left">
                                 <strong>@it.Nombre</strong>
                                 <div class="small">Precio: @String.Format("{0:N0}", it.Precio)</div>
-                                <div class="small">Stock: @it.StockDisponible</div>
                             </div>
                             <div class="right">
-                                <input type="number" min="1" max="@it.StockDisponible" value="@it.Cantidad"
-                                    @onchange="(e) => CambiarCantidad(it.GanadoId, ParseInt(e.Value))" />
                                 <button class="btn-link" @onclick="() => RemoverDelCarrito(it.GanadoId)">Eliminar</button>
                             </div>
                         </li>
@@ -184,15 +185,40 @@
             }
         </div>
     </div>
-
-
-
 </div>
+
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    <div class="toast-message @toastClass">
+        @mensaje
+    </div>
+}
+
+@if (mostrarModalCompra)
+{
+    <div class="modal-comprarealizada">
+        <div class="comprarealizada-content">
+            <h3>Compra realizada con éxito</h3>
+
+            <p>@infoCompra</p>
+
+            <button class="btn-volver" @onclick="CerrarModalCompra">
+                Volver
+            </button>
+        </div>
+    </div>
+}
 
 @code {
 
     private bool sesionActiva = false;
     private bool sidebarOpen = false;
+
+    private string mensaje = "";
+    private string toastClass = "";
+
+    private bool mostrarModalCompra = false;
+    private string infoCompra = "";
 
     private List<CartItem> cartItems = new();
 
@@ -211,7 +237,7 @@
     private void IrAHome() => Navigation.NavigateTo("/home");
     private void IrABienvenida() => Navigation.NavigateTo("/");
 
-    private int CartCount => cartItems.Sum(x => x.Cantidad);
+    private int CartCount => cartItems.Count;
 
     private void ToggleSidebar()
     {
@@ -220,31 +246,15 @@
 
     private void AgregarAlCarrito(GanadoMarketplace g)
     {
-        if (g.StockVenta <= 0)
-        {
-            return;
-        }
+        if (cartItems.Any(x => x.GanadoId == g.IdGanado))
+        return;
 
-        var existing = cartItems.FirstOrDefault(x => x.GanadoId == g.IdGanado);
-        if (existing == null)
+        cartItems.Add(new CartItem
         {
-            cartItems.Add(new CartItem
-            {
-                GanadoId = g.IdGanado,
-                Nombre = g.CodigoArete,
-                Precio = g.PrecioUnitario,
-                Cantidad = 1,
-                StockDisponible = g.StockVenta
-            });
-        }
-        else
-        {
-            if (existing.Cantidad + 1 > existing.StockDisponible)
-            {
-                return;
-            }
-            existing.Cantidad += 1;
-        }
+            GanadoId = g.IdGanado,
+            Nombre = g.CodigoArete,
+            Precio = g.PrecioUnitario
+        });
 
         sidebarOpen = true;
     }
@@ -255,37 +265,37 @@
         if (it != null) cartItems.Remove(it);
     }
 
-    private void CambiarCantidad(int ganadoId, int nuevaCantidad)
-    {
-        var it = cartItems.FirstOrDefault(x => x.GanadoId == ganadoId);
-        if (it == null) return;
+    private decimal TotalCarrito() => cartItems.Sum(x => x.Precio);
 
-        if (nuevaCantidad <= 0)
+    private async Task ProcesarCompra()
+    {
+        int userId = await SesionService.ObtenerIdUsuarioAsync();
+        if (userId == 0) {  return; }
+
+        var ids = cartItems.Select(x => x.GanadoId).ToList();
+
+        var request = new
         {
-            cartItems.Remove(it);
-            return;
-        }
+            GanadoIds = ids,
+            ClienteId = userId
+        };
 
-        if (nuevaCantidad > it.StockDisponible)
+        var respuesta = await MarketplaceService.ProcesarCompraAsync(request);
+
+        if (respuesta.Exito)
         {
-            return;
+            cartItems.Clear();
+            await OnInitializedAsync();
+            sidebarOpen = false;
+            MostrarNotificacion("Correcto: Comprar realizada correctamente", "success");
+            await Task.Delay(2500);
+            string resumen = $"Has comprado {ids.Count} res(es).";
+            MostrarModalCompra(resumen);
         }
-
-        it.Cantidad = nuevaCantidad;
-    }
-
-    private decimal TotalCarrito() => cartItems.Sum(x => x.Precio * x.Cantidad);
-
-    private int ParseInt(object? value)
-    {
-        if (value == null) return 1;
-        if (int.TryParse(value.ToString(), out var n)) return n;
-        return 1;
-    }
-
-    private void ProcesarCompra()
-    {
-        Console.WriteLine("comprado");
+        else
+        {
+            MostrarNotificacion("Error al procesar la compra", "error");
+        }
     }
 
     public class CartItem
@@ -293,7 +303,29 @@
         public int GanadoId { get; set; }
         public string Nombre { get; set; }
         public decimal Precio { get; set; }
-        public int Cantidad { get; set; }
-        public int StockDisponible { get; set; }
+    }
+
+    private void MostrarModalCompra(string datos)
+    {
+        infoCompra = datos;
+        mostrarModalCompra = true;
+        StateHasChanged();
+    }
+
+    private void CerrarModalCompra()
+    {
+        mostrarModalCompra = false;
+        StateHasChanged();
+    }
+
+    private async void MostrarNotificacion(string texto, string tipo)
+    {
+        mensaje = texto;
+        toastClass = tipo;
+        StateHasChanged();
+
+        await Task.Delay(1000);
+        mensaje = "";
+        StateHasChanged();
     }
 }

@@ -7,6 +7,5 @@ public class GanadoMarketplaceDto
     public decimal Peso { get; set; }
     public string EstadoSalud { get; set; }
     public string Imagen { get; set; }
-    public int StockVenta { get; set; }
     public decimal PrecioUnitario { get; set; }
 }

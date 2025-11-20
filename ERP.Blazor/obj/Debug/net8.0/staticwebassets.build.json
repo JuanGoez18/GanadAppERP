@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "skmX9NHkvGeIuv/li/mZgwpr/ABAhUznAh1tWPbO/8I=",
+  "Hash": "BpjdJ/zPOry3Mlw1zgn5+bHs2HdhVT4gpGcEW5GYgmM=",
   "Source": "ERP.Blazor",
   "BasePath": "/",
   "Mode": "Root",
@@ -7921,12 +7921,12 @@
       "OriginalItemSpec": "wwwroot\\images\\1.png"
     },
     {
-      "Identity": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\images\\ganad1.jpg",
+      "Identity": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\images\\default-ganado.jpg",
       "SourceId": "ERP.Blazor",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\",
       "BasePath": "/",
-      "RelativePath": "images/ganad1.jpg",
+      "RelativePath": "images/default-ganado.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -7937,7 +7937,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\ganad1.jpg"
+      "OriginalItemSpec": "wwwroot\\images\\default-ganado.jpg"
     },
     {
       "Identity": "C:\\Users\\ADMIN\\Documents\\GitHub\\GanadAppERP\\ERP.Blazor\\wwwroot\\images\\ganadapp.png",
